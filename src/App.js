@@ -6,6 +6,8 @@ import Parser from "./containers/Parser/Parser";
 // import Graph from "./components/Graph/Graph";
 import GraphCy from "./components/Graph/GraphCy";
 import GraphVis from "./components/Graph/GraphVis";
+import GraphVisPerf from "./components/Graph/GraphVisPerf";
+import ReactGraphVisNeibours from "./components/Graph/ReactGraphVisNeibours";
 import ParserContext from "./context/ParserContext";
 
 // import { nodes, edges } from "./components/Graph/defaultData";
@@ -60,10 +62,25 @@ class App extends React.Component {
           <button onClick={() => this.setState({ graphRender: !graphRender })}>
             Toggle graph!
           </button>
+
+          {/*  <GraphVis nodes={nodes} edges={edges} />
           {graphRender ? (
-            <GraphVis nodes={this.state.nodes} edges={this.state.edges} />
+            <GraphVisPerf nodes={this.state.nodes} edges={this.state.edges} />
           ) : null}
-          <div id="network" style={{ width: "70vw", height: "70vh" }}></div>
+          <div
+            id="network"
+            style={{
+              width: "70vw",
+              height: "70vh",
+              border: "1px solid black"
+            }}
+          ></div> */}
+          {graphRender ? (
+            <ReactGraphVisNeibours
+              nodes={this.state.nodes}
+              edges={this.state.edges}
+            />
+          ) : null}
         </ParserContext.Provider>
       </div>
     );

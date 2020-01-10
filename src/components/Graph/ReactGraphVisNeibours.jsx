@@ -3,31 +3,16 @@ import Graph from "react-graph-vis";
 
 import ParserContext from "../../context/ParserContext";
 
-class GraphVis extends Component {
+class ReactGraphVisNeibours extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       graph: {
-        nodes: [
-          { id: 1, label: "Катя", color: "#e04141" },
-          { id: 2, label: "Нина", color: "#e09c41" },
-          { id: 3, label: "Ксюша", color: "#e0df41" },
-          { id: 4, label: "Катюша", color: "#7be041" },
-          { id: 5, label: "Егор Олегович", color: "#41e0c9" }
-        ],
-        edges: [
-          { from: 1, to: 2 },
-          { from: 1, to: 3 },
-          { from: 2, to: 4 },
-          { from: 2, to: 5 }
-        ]
+        nodes: this.props.nodes,
+        edges: this.props.edges
       },
       options: {
-        interaction: { hover: true },
-        layout: {
-          hierarchical: false
-        },
         nodes: {
           shape: "dot",
           scaling: {
@@ -47,33 +32,54 @@ class GraphVis extends Component {
         },
         edges: {
           width: 0.15,
-          color: { inherit: "from" },
+          color: "#00A",
           smooth: {
             type: "continuous"
           }
         },
-        physics: false,
+        physics: {
+          stabilization: false,
+          barnesHut: {
+            gravitationalConstant: -80000,
+            springConstant: 0.001,
+            springLength: 200
+          }
+        },
         interaction: {
+          hover: true,
           tooltipDelay: 200,
           hideEdgesOnDrag: true,
-          hideEdgesOnZoom: true
+          hoverConnectedEdges: true
         }
+        // physics: {
+        //   stabilization: false,
+        //   barnesHut: {
+        //     gravitationalConstant: -80000,
+        //     springConstant: 0.001,
+        //     springLength: 200
+        //   }
+        // },
       },
       events: {
+        // select: event => {
+        //   console.log("select");
+        //   console.log("Event:");
+        //   this.neighbourhoodHighlight(event);
+        //   console.log(event);
+        //   var { nodes, edges } = event;
+        //   console.log("Selected nodes:");
+        //   console.log(nodes);
+        //   console.log("Selected edges:");
+        //   console.log(edges);
+        // },
         select: event => {
-          console.log("Event:");
-          console.log(event);
-          var { nodes, edges } = event;
-          console.log("Selected nodes:");
-          console.log(nodes);
-          console.log("Selected edges:");
-          console.log(edges);
-        },
-        hoverNode: event => {
-          console.log("HOVER");
-          this.neighbourhoodHighlight(event);
+          console.log("select");
+          this.handleChangeColor(event);
         }
-        // hoverNode:
+        // ,
+        // deselectNode: event => {
+        //   this.handleDeselectNode;
+        // }
       },
       network: null,
       highlightActive: false
@@ -81,30 +87,36 @@ class GraphVis extends Component {
   }
 
   componentDidMount() {
-    console.log("GraphVis state: ", this.state);
+    console.log("Finished ReactGraphVisNeibours");
+    // this.state.network.on("click", this.neighbourhoodHighlight);
+    console.log(this.state.network);
   }
 
   setNetworkInstance = nw => {
     this.setState({
       network: nw
     });
-    console.log("setNetworkInstance: ", nw);
+  };
+
+  handleDeselectNode = () => {
+    console.log("handleDeselectNode");
   };
 
   neighbourhoodHighlight = params => {
-    console.log("yo!");
-    let { network, highlightActive } = this.state;
-    let allNodes = { ...this.state.graph.nodes };
+    console.log("neighbourhoodHighlight");
+    let highlightActive = false;
+    let allNodes = { ...this.props.nodes };
+    let { network } = this.state;
     // if something is selected:
     if (params.nodes.length > 0) {
       highlightActive = true;
       var i, j;
       var selectedNode = params.nodes[0];
+      console.log("selectedNode_1", selectedNode);
       var degrees = 2;
-
       // mark all nodes as hard to read.
       for (var nodeId in allNodes) {
-        allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+        allNodes[nodeId].color = "#000";
         if (allNodes[nodeId].hiddenLabel === undefined) {
           allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
           allNodes[nodeId].label = undefined;
@@ -112,7 +124,6 @@ class GraphVis extends Component {
       }
       var connectedNodes = network.getConnectedNodes(selectedNode);
       var allConnectedNodes = [];
-
       // get the second degree nodes
       for (i = 1; i < degrees; i++) {
         for (j = 0; j < connectedNodes.length; j++) {
@@ -121,17 +132,16 @@ class GraphVis extends Component {
           );
         }
       }
-
       // all second degree nodes get a different color and their label back
-      // for (i = 0; i < allConnectedNodes.length; i++) {
-      //   allNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
-      //   if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
-      //     allNodes[allConnectedNodes[i]].label =
-      //       allNodes[allConnectedNodes[i]].hiddenLabel;
-      //     allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
-      //   }
-      // }
-
+      for (i = 0; i < allConnectedNodes.length; i++) {
+        // allNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
+        allNodes[allConnectedNodes[i]].color = "#000";
+        if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
+          allNodes[allConnectedNodes[i]].label =
+            allNodes[allConnectedNodes[i]].hiddenLabel;
+          allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
+        }
+      }
       // all first degree nodes get their own color and their label back
       for (i = 0; i < connectedNodes.length; i++) {
         allNodes[connectedNodes[i]].color = undefined;
@@ -141,8 +151,9 @@ class GraphVis extends Component {
           allNodes[connectedNodes[i]].hiddenLabel = undefined;
         }
       }
-
       // the main node gets its own color and its label back.
+      console.log("selectedNode_2", selectedNode);
+      console.log("allNodes[selectedNode]", allNodes[selectedNode]);
       allNodes[selectedNode].color = undefined;
       if (allNodes[selectedNode].hiddenLabel !== undefined) {
         allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
@@ -159,7 +170,6 @@ class GraphVis extends Component {
       }
       highlightActive = false;
     }
-
     // transform the object into an array
     var updateArray = [];
     for (nodeId in allNodes) {
@@ -167,42 +177,49 @@ class GraphVis extends Component {
         updateArray.push(allNodes[nodeId]);
       }
     }
+    // network.setData({nodes: })
+    this.setState({ graph: { nodes: updateArray }, network });
+  };
 
-    this.setState({
-      network,
-      graph: { nodes: updateArray }
-    });
-    console.log("END updateArray", updateArray);
-    console.log("END allNodes", allNodes);
-    // nodesDataset.update(updateArray);
+  handleChangeColor = event => {
+    console.log("handleChangeColor");
+    console.log("event", event);
+    let nodeId = event.nodes[0];
+    console.log(nodeId);
+    let { nodes } = this.state.graph;
+    let selectedNode;
+    for (let node of nodes) {
+      if (node.id === nodeId) {
+        // selectedNode = node;
+        node.color = "#000";
+        break;
+      }
+    }
+    // this.setState({
+    //   graph: { nodes: nodes }
+    // });
+    // selectedNode.color = "#000";
+    // console.log("selectedNode", selectedNode);
   };
 
   render() {
     const { graph, options, events, network } = this.state;
     return (
       <div>
-        {true ? (
-          <Graph
-            style={{
-              width: "800px",
-              height: "800px",
-              border: "1px solid lightgray"
-            }}
-            graph={graph}
-            options={options}
-            events={events}
-            getNetwork={this.setNetworkInstance}
-          />
-        ) : null}
-        <button
-          onClick={() => console.log("network", network)}
-          style={{ display: "block" }}
-        >
-          To log Graph!
-        </button>
+        <Graph
+          style={{
+            width: "1000px",
+            height: "900px",
+            border: "1px solid lightgray"
+          }}
+          graph={graph}
+          options={options}
+          events={events}
+          getNetwork={this.setNetworkInstance}
+        />
       </div>
     );
   }
 }
 
-export default GraphVis;
+export default ReactGraphVisNeibours;

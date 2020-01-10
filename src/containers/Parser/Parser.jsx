@@ -14,28 +14,6 @@ class Parser extends Component {
     };
   }
 
-  /*
-  handleGetScript = () => {
-    let proxyUrl = "https://cors-anywhere.herokuapp.com/",
-    targetUrl =
-    "http://api.philpapers.org/browse/representationalism?format=embed&apiId=784298&apiKey=65bYvgX7lvNpObRF";
-    fetch(proxyUrl + targetUrl)
-    // .then(blob => blob.json())
-    .then(data => {
-      console.log("new", data);
-      console.groupCollapsed("Phil-data");
-      console.table(data);
-      console.groupEnd();
-      // document.querySelector("pre").innerHTML = JSON.stringify(data, null, 2);
-      console.log("last", data);
-      return data;
-    })
-    .catch(er => {
-      console.log("Catch error: ", er);
-    });
-  };
-  */
-
   handleGetPp = () => {
     let proxyUrl = "https://cors-anywhere.herokuapp.com/",
       targetUrl =
@@ -43,11 +21,7 @@ class Parser extends Component {
     fetch(proxyUrl + targetUrl)
       .then(blob => blob.json())
       .then(data => {
-        // console.log("not parsed", data);;
         this.parseToVis(data);
-        // this.setState({ graph });
-        // console.log("graph", graph);
-        // console.log("this.state", this.state);
       })
       .catch(er => {
         console.log("Catch error: ", er);
@@ -70,7 +44,9 @@ class Parser extends Component {
         id: id,
         title: "none",
         label: name,
-        value: 50
+        value: 10000,
+        color: "#fff",
+        border: "1px solid black"
       });
 
       parents.forEach(par => {
@@ -80,13 +56,6 @@ class Parser extends Component {
           primeParent: primeParent
         });
       });
-
-      // elementsEdges.push({
-      //   from: id,
-      //   to: node.prParent == "1" ? undefined : node.prParent,
-      //   label: `Edge from ${node.id} to ${node.prParent}`,
-      //   id: node.name
-      // });
     });
 
     this.setState({
@@ -99,9 +68,10 @@ class Parser extends Component {
 
   handleGetInPho = () => {
     axios
-      .get(`${InPhO}/entity.json`)
+      .get(`${InPhO}/taxonomy`)
       // .then(blob => blob.json())
       .then(res => {
+        console.log(res);
         const parsed = res.data.responseData.results;
         // console.log("InPhO thinker/:id", res);
         console.groupCollapsed("InPho-data");

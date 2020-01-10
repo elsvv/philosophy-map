@@ -1,130 +1,84 @@
 import React from "react";
-import vis from "vis";
+import Graph from "react-graph-vis";
+// import vis from "vis-network/dist/vis-network.min.js";
+// import "bootstrap/dist/css/bootstrap.min.css";
+
+let nodes = [
+  { id: 1, label: "Node 1", color: "#e04141" },
+  { id: 2, label: "Node 2", color: "#e09c41" },
+  { id: 3, label: "Node 3", color: "#e0df41" },
+  { id: 4, label: "Node 4", color: "#7be041" },
+  { id: 5, label: "Node 5", color: "#41e0c9" }
+];
+
+let edges = [
+  { from: 1, to: 2 },
+  { from: 1, to: 3 },
+  { from: 2, to: 4 },
+  { from: 2, to: 5 }
+];
+//
+// let nodesDataset = new vis.DataSet(nodes);
+// let edgesDataset = new vis.DataSet(nodes);
 
 const GraphVis = props => {
+  // console.log("nodesDef", nodes);
 
-  var network;
-  var allNodes;
-  var highlightActive = false;
-  var nodesDataset = new vis.DataSet(props.nodes); // these come from WorldCup2014.js
-  var edgesDataset = new vis.DataSet(props.edges); // these come from WorldCup2014.js
+  let graph = {
+    nodes: nodes,
+    edges: edges
+  };
 
-  // console.log(nodes);
-  // console.log(edges);
-
-  function redrawAll() {
-    var container = document.getElementById("network");
-    var options = {
-      nodes: {
-        shape: "dot",
-        scaling: {
-          min: 10,
-          max: 30,
-          label: {
-            min: 8,
-            max: 30,
-            drawThreshold: 12,
-            maxVisible: 20
-          }
-        },
-        font: {
-          size: 12,
-          face: "Tahoma"
-        }
-      },
-      edges: {
-        width: 0.15,
-        color: { inherit: "from" },
-        smooth: {
-          type: "continuous"
-        }
-      },
-      physics: false,
-      interaction: {
-        tooltipDelay: 200,
-        hideEdgesOnDrag: true,
-        hideEdgesOnZoom: true
-      }
-    };
-    var data = { nodes: nodesDataset, edges: edgesDataset }; // Note: data is coming from ./datasources/WorldCup2014.js
-    network = new vis.Network(container, data, options);
-    // get a JSON object
-    allNodes = nodesDataset.get({ returnType: "Object" });
-    network.on("click", neighbourhoodHighlight);
-  }
-  function neighbourhoodHighlight(params) {
-    // if something is selected:
-    if (params.nodes.length > 0) {
-      highlightActive = true;
-      var i, j;
-      var selectedNode = params.nodes[0];
-      var degrees = 2;
-      // mark all nodes as hard to read.
-      for (var nodeId in allNodes) {
-        allNodes[nodeId].color = "rgba(200,200,200,0.5)";
-        if (allNodes[nodeId].hiddenLabel === undefined) {
-          allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
-          allNodes[nodeId].label = undefined;
-        }
-      }
-      var connectedNodes = network.getConnectedNodes(selectedNode);
-      var allConnectedNodes = [];
-      // get the second degree nodes
-      for (i = 1; i < degrees; i++) {
-        for (j = 0; j < connectedNodes.length; j++) {
-          allConnectedNodes = allConnectedNodes.concat(
-            network.getConnectedNodes(connectedNodes[j])
-          );
-        }
-      }
-      // all second degree nodes get a different color and their label back
-      for (i = 0; i < allConnectedNodes.length; i++) {
-        allNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
-        if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
-          allNodes[allConnectedNodes[i]].label =
-          allNodes[allConnectedNodes[i]].hiddenLabel;
-          allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
-        }
-      }
-      // all first degree nodes get their own color and their label back
-      for (i = 0; i < connectedNodes.length; i++) {
-        allNodes[connectedNodes[i]].color = undefined;
-        if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
-          allNodes[connectedNodes[i]].label =
-          allNodes[connectedNodes[i]].hiddenLabel;
-          allNodes[connectedNodes[i]].hiddenLabel = undefined;
-        }
-      }
-      // the main node gets its own color and its label back.
-      allNodes[selectedNode].color = undefined;
-      if (allNodes[selectedNode].hiddenLabel !== undefined) {
-        allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
-        allNodes[selectedNode].hiddenLabel = undefined;
-      }
-    } else if (highlightActive === true) {
-      // reset all nodes
-      for (var nodeId in allNodes) {
-        allNodes[nodeId].color = undefined;
-        if (allNodes[nodeId].hiddenLabel !== undefined) {
-          allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
-          allNodes[nodeId].hiddenLabel = undefined;
-        }
-      }
-      highlightActive = false;
+  const options = {
+    layout: {
+      hierarchical: false
+    },
+    edges: {
+      color: "#000000"
     }
-    // transform the object into an array
-    var updateArray = [];
-    for (nodeId in allNodes) {
-      if (allNodes.hasOwnProperty(nodeId)) {
-        updateArray.push(allNodes[nodeId]);
+  };
+
+  const events = {
+    click: event => {
+      handleChangeColor(event);
+    }
+  };
+
+  const handleChangeColor = event => {
+    console.log("handleChangeColor");
+    console.log("event", event);
+    let nodeId = event.nodes[0];
+    console.log("nodeId", nodeId);
+    let selectedNode;
+    for (let node of graph.nodes) {
+      if (node.id === nodeId) {
+        // selectedNode = node;
+        node.color = "#68fff8";
+        break;
       }
     }
-    nodesDataset.update(updateArray);
-  }
+    network.setData({ nodes: graph.nodes, edges: graph.edges });
+    // selectedNode.color = "#000";
+    // console.log("selectedNode", selectedNode);
+  };
 
-  redrawAll();
+  let network;
+  const setNetworkInstance = nw => {
+    network = nw;
+    console.log("network", network);
+  };
 
-  return <div></div>;
+  return (
+    <div>
+      <Graph
+        graph={graph}
+        options={options}
+        events={events}
+        getNetwork={setNetworkInstance}
+        style={{ height: "640px" }}
+      />
+    </div>
+  );
 };
 
 export default GraphVis;
