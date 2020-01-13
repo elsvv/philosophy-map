@@ -34,19 +34,28 @@ class Parser extends Component {
     let parsedNodes = [],
       parsedEdges = [];
 
+    let mainContainer = [];
+
     data.forEach((theme, idx) => {
       let name = theme[0],
         id = parseInt(theme[1]),
         parents = theme[2].split(",").map(el => parseInt(el)),
         primeParent = parseInt(theme[3]);
+      let mainColor = false,
+        mainValue = false;
+
+      if (primeParent === 1) {
+        mainContainer.push(theme);
+        mainColor = "#00F";
+        mainValue = 50000000;
+      }
 
       parsedNodes.push({
         id: id,
         title: "none",
         label: name,
-        value: 10000,
-        color: "#fff",
-        border: "1px solid black"
+        value: mainValue || 10,
+        color: mainColor || "#fff"
       });
 
       parents.forEach(par => {
@@ -64,6 +73,7 @@ class Parser extends Component {
     });
     console.log("PARSED NODES: ", parsedNodes);
     console.log("PARSED EDGES: ", parsedEdges);
+    console.log("mainContainer: ", mainContainer);
   };
 
   handleGetInPho = () => {

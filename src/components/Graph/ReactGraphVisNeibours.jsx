@@ -15,35 +15,36 @@ class ReactGraphVisNeibours extends Component {
       options: {
         nodes: {
           shape: "dot",
-          scaling: {
-            min: 10,
-            max: 30,
-            label: {
-              min: 8,
-              max: 30,
-              drawThreshold: 12,
-              maxVisible: 20
-            }
-          },
+          // scaling: {
+          //   min: 10,
+          //   max: 30,
+          //   label: {
+          //     min: 8,
+          //     max: 30,
+          //     drawThreshold: 12,
+          //     maxVisible: 20
+          //   }
+          // },
           font: {
-            size: 12,
+            size: 30,
             face: "Tahoma"
           }
         },
         edges: {
           width: 0.15,
-          color: "#00A",
+          color: "#777",
           smooth: {
             type: "continuous"
           }
         },
         physics: {
-          stabilization: false,
-          barnesHut: {
-            gravitationalConstant: -80000,
-            springConstant: 0.001,
-            springLength: 200
-          }
+          stabilization: false
+          // ,
+          // barnesHut: {
+          //   gravitationalConstant: 80,
+          //   springConstant: 0.00001,
+          //   springLength: 1
+          // }
         },
         interaction: {
           hover: true,
@@ -208,8 +209,8 @@ class ReactGraphVisNeibours extends Component {
       <div>
         <Graph
           style={{
-            width: "1000px",
-            height: "900px",
+            width: "100vw",
+            height: "90vh",
             border: "1px solid lightgray"
           }}
           graph={graph}

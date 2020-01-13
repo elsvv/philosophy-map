@@ -22,7 +22,8 @@ class App extends React.Component {
       nodes: [],
       edges: [],
       graph: null,
-      graphRender: false
+      graphRender: false,
+      toFind: ""
     };
   }
 
@@ -35,8 +36,55 @@ class App extends React.Component {
       nodes,
       edges
     });
-    console.log("3_in handleGraph:");
-    // forceUpdate();
+  };
+
+  handleSearch = event => {
+    let title = event.target.value.toLowerCase();
+    this.setState({ toFind: title });
+    console.log(this.state.toFind);
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const { nodes, toFind, edges } = this.state;
+    console.log("toFind", toFind);
+    console.log("nodes", nodes);
+    const resNodes = nodes.filter(node =>
+      node.label.toLowerCase().includes(toFind)
+    );
+    const searchIds = [];
+    resNodes.forEach(node => {
+      node.color = "#ffe";
+      node.value = 50000000;
+      searchIds.push(node.id);
+    });
+    console.log("searchIds", searchIds);
+    console.log("edges", edges);
+    const resEdges = edges.filter(edge => {
+      return searchIds.includes(edge.to) || searchIds.includes(edge.from);
+    });
+    console.log("resEdges", resEdges);
+
+    const childSet = new Set();
+    resEdges.forEach(edge => {
+      if (!(childSet.has(edge.to) || childSet.has(edge.from))) {
+        childSet.add(edge.to);
+        childSet.add(edge.from);
+      }
+    });
+    const childIds = [...childSet];
+
+    console.log("resNodes PREV", resNodes);
+
+    nodes.forEach(node => {
+      if (childIds.includes(node.id) && !resNodes.includes(node)) {
+        resNodes.push(node);
+      }
+    });
+
+    console.log("resNodes LAST", resNodes);
+
+    this.setState({ nodes: resNodes, edges: resEdges });
   };
 
   render() {
@@ -57,6 +105,16 @@ class App extends React.Component {
             <li>IDs of the primary parent</li>
           </ul>
           <p>Note that the root category (which has ID 1) is not included.</p>
+          <div>
+            <form onSubmit={this.handleSubmit}>
+              <input
+                type="text"
+                onChange={this.handleSearch}
+                placeholder="search Philisophy!"
+              />
+              <input type="submit" />
+            </form>
+          </div>
           <Parser handleGraph={this.handleGraph} />
           {/*<GraphCy graph={this.state.graph} />*/}
           <button onClick={() => this.setState({ graphRender: !graphRender })}>
