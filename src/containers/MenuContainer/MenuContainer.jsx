@@ -1,18 +1,32 @@
 import React, { Component } from "react";
+// import Draggable from "react-draggable";
+import "./MenuContainer.scss";
+
+import Entry from "../../components/Entry/Entry";
+import PhilPapers from "../PhilPapers/PhilPapers";
 
 class MenuContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = null;
+    this.state = {
+      display: "entry"
+    };
   }
+
+  changeDisplay = display => {
+    this.setState({ display });
+  };
+
   render() {
+    const { display } = this.state;
     return (
       <div className="MenuContainer">
-        <h1>{this.state.header}</h1>
-        <p>
-          Here you can observe philosophy. This app uses some open APIs and
-          parses it to graph which is quite convinient bla bla bla...{" "}
-        </p>
+        {display === "entry" ? (
+          <Entry changeDisplay={this.changeDisplay} />
+        ) : null}
+        {display === "philpapers" ? (
+          <PhilPapers changeDisplay={this.changeDisplay} />
+        ) : null}
       </div>
     );
   }

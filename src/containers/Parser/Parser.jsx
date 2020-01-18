@@ -94,46 +94,29 @@ class Parser extends Component {
       });
   };
 
+  componentWillMount() {
+    this.handleGetPp();
+    // this.props.handleLoad(this.state.nodes, this.state.edges);
+    this.props.handleLoad("nodes", "edges");
+  }
+
   render() {
     return (
-      <div
-        className="Parser"
-        style={
-          {
-            // display: "flex",
-            // justifyContent: "center",
-            // alignItems: "center",
-            // height: "100vh"
-          }
-        }
-      >
-        <ParserContext.Provider
-          value={{
-            nodes: this.state.nodes,
-            edges: this.state.edges
-          }}
-        >
-          <div id="xpapers_gadget">
-            Loading papers... (
-            <a href="http://philpapers.org/browse/representationalism">here</a>{" "}
-            if the papers don't load.)
-          </div>
-          <br />
-          <div>
-            <button onClick={this.handleGetPp} style={{ display: "block" }}>
-              Phil-get!
-            </button>
-            <button onClick={this.handleGetInPho} style={{ display: "block" }}>
-              InPho-get!
-            </button>
-            <button
-              onClick={() => this.props.handleGraph(this.state)}
-              style={{ display: "block" }}
-            >
-              To Graph!
-            </button>
-          </div>
-        </ParserContext.Provider>
+      <div className="Parser">
+        <div>
+          <button onClick={this.handleGetPp} style={{ display: "block" }}>
+            Phil-get!
+          </button>
+          <button onClick={this.handleGetInPho} style={{ display: "block" }}>
+            InPho-get!
+          </button>
+          <button
+            onClick={() => this.props.handleGraph(this.state)}
+            style={{ display: "block" }}
+          >
+            To Graph!
+          </button>
+        </div>
       </div>
     );
   }

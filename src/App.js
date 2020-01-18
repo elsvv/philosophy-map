@@ -1,4 +1,5 @@
 import React from "react";
+import Draggable from "react-draggable";
 import "./App.css";
 
 import Parser from "./containers/Parser/Parser";
@@ -8,6 +9,8 @@ import GraphVis from "./components/Graph/GraphVis";
 import GraphVisPerf from "./components/Graph/GraphVisPerf";
 import ReactGraphVisNeibours from "./components/Graph/ReactGraphVisNeibours";
 import ParserContext from "./context/ParserContext";
+
+import MenuContainer from "./containers/MenuContainer/MenuContainer";
 
 import Loader from "./components/Loader/Loader";
 
@@ -93,24 +96,18 @@ class App extends React.Component {
     // console.log("edges: ", edges);
     const { graphRender } = this.state;
 
-    if (true) {
+    if (false) {
       return <Loader />;
     }
 
     return (
       <div className="App">
         <ParserContext.Provider>
-          <p>
-            Each entry in this list represents a category. The included fields
-            are:{" "}
-          </p>
-          <ul>
-            <li>Name of the category</li>
-            <li>ID of the category</li>
-            <li>Comma-separated list of IDs of parents</li>
-            <li>IDs of the primary parent</li>
-          </ul>
-          <p>Note that the root category (which has ID 1) is not included.</p>
+          <Draggable>
+            <div className="draggable">
+              <MenuContainer />
+            </div>
+          </Draggable>
           <div>
             <form onSubmit={this.handleSubmit}>
               <input
@@ -121,24 +118,11 @@ class App extends React.Component {
               <input type="submit" />
             </form>
           </div>
-          <Parser handleGraph={this.handleGraph} />
-          {/*<GraphCy graph={this.state.graph} />*/}
+          {/*<Parser handleGraph={this.handleGraph} />
+          <GraphCy graph={this.state.graph} />*/}
           <button onClick={() => this.setState({ graphRender: !graphRender })}>
             Toggle graph!
           </button>
-
-          {/*  <GraphVis nodes={nodes} edges={edges} />
-          {graphRender ? (
-            <GraphVisPerf nodes={this.state.nodes} edges={this.state.edges} />
-          ) : null}
-          <div
-            id="network"
-            style={{
-              width: "70vw",
-              height: "70vh",
-              border: "1px solid black"
-            }}
-          ></div> */}
           {graphRender ? (
             <ReactGraphVisNeibours
               nodes={this.state.nodes}

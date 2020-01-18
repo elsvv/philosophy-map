@@ -1,21 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Loader.scss";
 
 const Loader = props => {
-  // let [polygon, setPolygon] = useState(0);
-
-  // const polygons = [""];
-
-  // let cl = "Polygon-1";
   let [cls, setCls] = useState("Polygon-1");
   let [container, setContainer] = useState(["loader-container"]);
-  let [degree, setDegree] = useState(30);
+  let [degree, setDegree] = useState(20);
   let [rotDeg, setRotDeg] = useState(1);
-  // let gradient =
-  //   "radial-gradient(50% 50% at 50% 50%, #469bff 30%, rgba(255, 255, 255, 0) 100%)";
 
   const handleLoad = () => {
-    let period = 100;
+    let period = 170;
     let polCount = 0;
     for (let i = 1; i <= 28; i++) {
       const timer = () =>
@@ -38,10 +31,13 @@ const Loader = props => {
     }
   };
 
+  useEffect(() => {
+    handleLoad();
+  }, []);
+
   return (
     <div
       className={container}
-      onClick={handleLoad}
       style={{
         background: `radial-gradient(50% 50% at 50% 50%, #469bff ${degree}%, rgba(255, 255, 255, 0) 100%)`,
         transform: `translate(-50%, -50%) rotate(${rotDeg / 10}deg)`
