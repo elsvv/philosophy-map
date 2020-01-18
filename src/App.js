@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-// import axios from "axios";
 
 import Parser from "./containers/Parser/Parser";
 // import Graph from "./components/Graph/Graph";
@@ -9,6 +8,8 @@ import GraphVis from "./components/Graph/GraphVis";
 import GraphVisPerf from "./components/Graph/GraphVisPerf";
 import ReactGraphVisNeibours from "./components/Graph/ReactGraphVisNeibours";
 import ParserContext from "./context/ParserContext";
+
+import Loader from "./components/Loader/Loader";
 
 // import { nodes, edges } from "./components/Graph/defaultData";
 
@@ -91,6 +92,11 @@ class App extends React.Component {
     // console.log("nodes: ", nodes);
     // console.log("edges: ", edges);
     const { graphRender } = this.state;
+
+    if (true) {
+      return <Loader />;
+    }
+
     return (
       <div className="App">
         <ParserContext.Provider>
