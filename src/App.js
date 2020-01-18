@@ -91,6 +91,11 @@ class App extends React.Component {
     this.setState({ nodes: resNodes, edges: resEdges });
   };
 
+  handleUp = (nodes, edges) => {
+    const { graphRender } = this.state;
+    this.setState({ nodes, edges, graphRender: !graphRender });
+  };
+
   render() {
     // console.log("nodes: ", nodes);
     // console.log("edges: ", edges);
@@ -105,7 +110,7 @@ class App extends React.Component {
         <ParserContext.Provider>
           <Draggable>
             <div className="draggable">
-              <MenuContainer />
+              <MenuContainer handleUp={this.handleUp} />
             </div>
           </Draggable>
           <div>

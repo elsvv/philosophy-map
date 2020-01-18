@@ -22,7 +22,7 @@ const Entry = props => {
           handleClick={props.changeDisplay}
         />
         <div id="disabled" style={{ backgroundColor: "#ccc" }}>
-          <Button text="InPhO API" />
+          <Button text="InPhOproject.org API" />
         </div>
       </div>
     </div>

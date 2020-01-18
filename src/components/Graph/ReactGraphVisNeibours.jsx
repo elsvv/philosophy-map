@@ -206,9 +206,10 @@ class ReactGraphVisNeibours extends Component {
   render() {
     const { graph, options, events, network } = this.state;
     return (
-      <div>
+      <div className="grapg-container" style={{ position: "absolute" }}>
         <Graph
           style={{
+            position: "revative",
             width: "100vw",
             height: "100vh",
             border: "1px solid lightgray"

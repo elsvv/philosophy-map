@@ -10,7 +10,8 @@ class PhilPapers extends Component {
     this.state = {
       parsedNodes: null,
       parsedEdges: null,
-      isWaiting: true
+      isWaiting: true,
+      isFiltered: false
     };
   }
 
@@ -71,35 +72,33 @@ class PhilPapers extends Component {
       parsedEdges,
       isWaiting: false
     });
-    console.log("PARSED NODES: ", parsedNodes);
-    console.log("PARSED EDGES: ", parsedEdges);
-    console.log("mainContainer: ", mainContainer);
   };
 
   componentDidMount() {
     this.handleGetPp();
   }
 
+  passUp = () => {
+    this.props.handleUp(this.state.parsedNodes, this.state.parsedEdges);
+  };
+
   render() {
-    const { isWaiting } = this.state;
-    console.log(this.props.changeDisplay);
+    const { isWaiting, isFiltered } = this.state;
     const controls = [
       { name: "back", handler: this.props.changeDisplay, arg: "entry" },
       { name: "hide", handler: this.props.changeDisplay, arg: "hidden" }
     ];
+    let message = isFiltered ? "Update graph" : "See full map";
 
     return (
       <div className="philpapers-container">
         <Controls controls={controls} />
         <div className="title-container">
           <h1 className="title">PhilPapers</h1>
-          <p className="text">
-            <span>H</span>ere you can observe philosophy. This{"\u00A0"}app uses
-            some open APIs and parses it to graph which is quite convinient bla
-            bla bla...{" "}
-          </p>
+          <p className="text">PhilPapers Component</p>
           <p className="pick">Pick data-source:</p>
         </div>
+        <Button text={message} data="philpapers" handleClick={this.passUp} />
         {!isWaiting ? <h1>Finished!</h1> : null}
         {/*   <div className="button-set">
            <Button text="PhilPapers.org API" data="philpapers" />

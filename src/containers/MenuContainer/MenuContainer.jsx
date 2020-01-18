@@ -25,7 +25,10 @@ class MenuContainer extends Component {
           <Entry changeDisplay={this.changeDisplay} />
         ) : null}
         {display === "philpapers" ? (
-          <PhilPapers changeDisplay={this.changeDisplay} />
+          <PhilPapers
+            changeDisplay={this.changeDisplay}
+            handleUp={this.props.handleUp}
+          />
         ) : null}
       </div>
     );
