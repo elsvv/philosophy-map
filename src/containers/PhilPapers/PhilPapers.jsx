@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import "./PhilPapers.scss";
 
 import Parser from "../Parser/Parser";
 import Button from "../../components/Button/Button";
+import SearchBar from "../../components/SearchBar/SearchBar";
 import Controls from "../../components/Controls/Controls";
 
 class PhilPapers extends Component {
@@ -10,8 +12,11 @@ class PhilPapers extends Component {
     this.state = {
       parsedNodes: null,
       parsedEdges: null,
+      nodes: null,
+      edges: null,
       isWaiting: true,
-      isFiltered: false
+      isFiltered: false,
+      toFind: ""
     };
   }
 
@@ -78,8 +83,62 @@ class PhilPapers extends Component {
     this.handleGetPp();
   }
 
-  passUp = () => {
-    this.props.handleUp(this.state.parsedNodes, this.state.parsedEdges);
+  passUp = (nodes, edges) => {
+    this.props.handleUp(nodes, edges);
+  };
+
+  handleSearch = event => {
+    if (!event.target.value) {
+      this.setState({ nodes: null, edges: null, isFiltered: false });
+    }
+    let title = event.target.value.toLowerCase();
+    this.setState({ toFind: title });
+    console.log(this.state.toFind);
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const { parsedNodes, toFind, parsedEdges } = this.state;
+    console.log("toFind", toFind);
+    console.log("nodes", parsedNodes);
+    const resNodes = parsedNodes.filter(node =>
+      node.label.toLowerCase().includes(toFind)
+    );
+    const searchIds = [];
+    resNodes.forEach(node => {
+      node.color = "#ffe";
+      node.value = 50000000;
+      searchIds.push(node.id);
+    });
+    console.log("searchIds", searchIds);
+    console.log("edges", parsedEdges);
+    const resEdges = parsedEdges.filter(edge => {
+      return searchIds.includes(edge.to) || searchIds.includes(edge.from);
+    });
+    console.log("resEdges", resEdges);
+
+    const childSet = new Set();
+    resEdges.forEach(edge => {
+      if (!(childSet.has(edge.to) || childSet.has(edge.from))) {
+        childSet.add(edge.to);
+        childSet.add(edge.from);
+      }
+    });
+    const childIds = [...childSet];
+
+    console.log("resNodes PREV", resNodes);
+
+    parsedNodes.forEach(node => {
+      if (childIds.includes(node.id) && !resNodes.includes(node)) {
+        resNodes.push(node);
+      }
+    });
+
+    console.log("resNodes LAST", resNodes);
+
+    this.setState({ nodes: resNodes, edges: resEdges, isFiltered: true });
+    if (resNodes && resEdges) {
+    }
   };
 
   render() {
@@ -88,6 +147,8 @@ class PhilPapers extends Component {
       { name: "back", handler: this.props.changeDisplay, arg: "entry" },
       { name: "hide", handler: this.props.changeDisplay, arg: "hidden" }
     ];
+    const nodes = this.state.nodes || this.state.parsedNodes;
+    const edges = this.state.edges || this.state.parsedEdges;
     let message = isFiltered ? "Update graph" : "See full map";
 
     return (
@@ -98,8 +159,21 @@ class PhilPapers extends Component {
           <p className="text">PhilPapers Component</p>
           <p className="pick">Pick data-source:</p>
         </div>
-        <Button text={message} data="philpapers" handleClick={this.passUp} />
-        {!isWaiting ? <h1>Finished!</h1> : null}
+
+        <SearchBar
+          handleSubmit={this.handleSubmit}
+          handleSearch={this.handleSearch}
+        />
+        {!isWaiting ? (
+          <>
+            <h1>Finished!</h1>{" "}
+            <Button
+              text={message}
+              data="philpapers"
+              handleClick={() => this.passUp(nodes, edges)}
+            />
+          </>
+        ) : null}
         {/*   <div className="button-set">
            <Button text="PhilPapers.org API" data="philpapers" />
           <Button text="InPhO API" style={{ background: "#C0C0C0" }} />
