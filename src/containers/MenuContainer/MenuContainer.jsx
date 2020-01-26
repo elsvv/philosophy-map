@@ -37,6 +37,8 @@ class MenuContainer extends Component {
         ) : null}
         {display === "inpho" ? (
           <InPho
+            infoToggle={this.props.infoToggle}
+            handleSelectedUp={this.props.handleSelectedUp}
             changeDisplay={this.changeDisplay}
             handleUp={this.props.handleUp}
             toggleLoader={this.props.toggleLoader}

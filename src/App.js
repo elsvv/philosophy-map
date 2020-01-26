@@ -11,10 +11,9 @@ import ReactGraphVisNeibours from "./components/Graph/ReactGraphVisNeibours";
 import ParserContext from "./context/ParserContext";
 
 import MenuContainer from "./containers/MenuContainer/MenuContainer";
+import InfoContainer from "./containers/InfoContainer/InfoContainer";
 
 import Loader from "./components/Loader/Loader";
-
-// import { nodes, edges } from "./components/Graph/defaultData";
 
 // const csrfToken = document.querySelector("meta[name=csrf-token]").content;
 // axios.defaults.headers.common["X-CSRF-TOKEN"] = csrfToken;
@@ -27,18 +26,15 @@ class App extends React.Component {
       edges: [],
       graph: null,
       graphRender: false,
-      loading: false
+      loading: false,
+      selectedData: null,
+      displayInfo: false
     };
   }
 
   handleUp = (nodes, edges) => {
     const { graphRender } = this.state;
     this.setState({ nodes, edges, graphRender: true });
-    // console.log("this.state.graphRender", this.state.graphRender);
-    // this.setState({ graphRender: false });
-    // console.log("this.state.nodes", this.state.nodes);
-    // this.setState({ graphRender: !graphRender });
-    // console.log("this.state.graphRender", this.state.graphRender);
   };
 
   toggleLoader = () => {
@@ -46,12 +42,28 @@ class App extends React.Component {
     this.setState({ loading: !loading });
   };
 
+  handleSelectedUp = selectedData => {
+    this.setState({ selectedData });
+  };
+
+  infoToggle = bool => {
+    this.setState({ displayInfo: bool });
+  };
+
   render() {
-    const { graphRender, loading } = this.state;
+    const { graphRender, loading, selectedData, displayInfo } = this.state;
 
     return (
       <div className="App">
         <ParserContext.Provider>
+          {displayInfo ? (
+            <InfoContainer
+              {...selectedData}
+              infoToggle={this.infoToggle}
+              toggleLoader={this.toggleLoader}
+              handleUp={this.handleUp}
+            />
+          ) : null}
           {graphRender ? (
             <ReactGraphVisNeibours
               nodes={this.state.nodes}
@@ -62,6 +74,8 @@ class App extends React.Component {
           {loading ? <Loader /> : null}
 
           <MenuContainer
+            infoToggle={this.infoToggle}
+            handleSelectedUp={this.handleSelectedUp}
             toggleLoader={this.toggleLoader}
             handleUp={this.handleUp}
           />

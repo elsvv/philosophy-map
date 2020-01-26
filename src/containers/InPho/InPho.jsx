@@ -24,7 +24,8 @@ class InPho extends Component {
       preview: null,
       ideas: [],
       thinkers: [],
-      other: []
+      other: [],
+      selectedData: null
     };
   }
 
@@ -249,11 +250,6 @@ class InPho extends Component {
           const { thinkers } = this.state;
           console.log("thinkers", thinkers);
 
-          // nodesIds = [
-          //   selectedId,
-          //   ...selectedData.influenced,
-          //   ...selectedData.influenced_by
-          // ];
           selectedData.influenced.forEach(influenced => {
             edges.push({ from: selectedId, to: influenced });
           });
@@ -288,8 +284,12 @@ class InPho extends Component {
 
           console.log("nodes", nodes);
           console.log("edges", edges);
-          this.setState({ nodes, edges });
+          this.setState({ nodes, edges, selectedData });
+
           this.passUp(nodes, edges);
+          this.props.handleSelectedUp(selectedData);
+          this.props.infoToggle(true);
+          return;
         }
       })
       .catch(error => console.log("Catch error:", error));
@@ -340,7 +340,7 @@ class InPho extends Component {
     let message = isFiltered ? "Update graph" : "See full map";
 
     return (
-      <div className="philpapers-container">
+      <div className="inpho-container">
         <Controls controls={controls} />
         <div className="title-container">
           <h1 className="title">Internet Philosophy Ontology project</h1>

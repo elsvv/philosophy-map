@@ -14,10 +14,11 @@ class ReactGraphVisNeibours extends Component {
       },
       options: {
         nodes: {
+          color: "#fff",
           shape: "dot",
           scaling: {
-            min: 10,
-            max: 30,
+            min: 5,
+            max: 5,
             label: {
               min: 8,
               max: 30,
@@ -31,11 +32,16 @@ class ReactGraphVisNeibours extends Component {
           }
         },
         edges: {
+          color: "#000",
           width: 0.15,
           color: "#777",
           smooth: {
             type: "continuous"
           }
+        },
+        groups: {
+          influenced: { color: { background: "#eee" } },
+          influenced_by: { color: { background: "#ddd" } }
         },
         physics: {
           stabilization: false
@@ -95,11 +101,13 @@ class ReactGraphVisNeibours extends Component {
 
   componentWillReceiveProps(nextProps) {
     // this.setState({ nodes: nextProps.nodes, edges: nextProps.edges });
-    console.log("nextProps UPDATE");
-    this.state.network.setData({
-      nodes: nextProps.nodes,
-      edges: nextProps.edges
-    });
+    if (nextProps.nodes != this.props.nodes) {
+      console.log("nextProps UPDATE");
+      this.state.network.setData({
+        nodes: nextProps.nodes,
+        edges: nextProps.edges
+      });
+    }
   }
 
   setNetworkInstance = nw => {
