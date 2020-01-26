@@ -15,19 +15,19 @@ class ReactGraphVisNeibours extends Component {
       options: {
         nodes: {
           shape: "dot",
-          // scaling: {
-          //   min: 10,
-          //   max: 30,
-          //   label: {
-          //     min: 8,
-          //     max: 30,
-          //     drawThreshold: 12,
-          //     maxVisible: 20
-          //   }
-          // },
+          scaling: {
+            min: 10,
+            max: 30,
+            label: {
+              min: 8,
+              max: 30,
+              drawThreshold: 12,
+              maxVisible: 20
+            }
+          },
           font: {
             size: 30,
-            face: "Tahoma"
+            face: "Times"
           }
         },
         edges: {
@@ -75,8 +75,9 @@ class ReactGraphVisNeibours extends Component {
         // },
         select: event => {
           console.log("select");
-          this.handleChangeColor(event);
-        }
+          this.handleSelect(event);
+        },
+        click: event => {}
         // ,
         // deselectNode: event => {
         //   this.handleDeselectNode;
@@ -89,18 +90,22 @@ class ReactGraphVisNeibours extends Component {
 
   componentDidMount() {
     console.log("Finished ReactGraphVisNeibours");
-    // this.state.network.on("click", this.neighbourhoodHighlight);
     console.log(this.state.network);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // this.setState({ nodes: nextProps.nodes, edges: nextProps.edges });
+    console.log("nextProps UPDATE");
+    this.state.network.setData({
+      nodes: nextProps.nodes,
+      edges: nextProps.edges
+    });
   }
 
   setNetworkInstance = nw => {
     this.setState({
       network: nw
     });
-  };
-
-  handleDeselectNode = () => {
-    console.log("handleDeselectNode");
   };
 
   neighbourhoodHighlight = params => {
@@ -182,25 +187,9 @@ class ReactGraphVisNeibours extends Component {
     this.setState({ graph: { nodes: updateArray }, network });
   };
 
-  handleChangeColor = event => {
-    console.log("handleChangeColor");
-    console.log("event", event);
-    let nodeId = event.nodes[0];
-    console.log(nodeId);
-    let { nodes } = this.state.graph;
-    let selectedNode;
-    for (let node of nodes) {
-      if (node.id === nodeId) {
-        // selectedNode = node;
-        node.color = "#000";
-        break;
-      }
-    }
-    // this.setState({
-    //   graph: { nodes: nodes }
-    // });
-    // selectedNode.color = "#000";
-    // console.log("selectedNode", selectedNode);
+  handleSelect = event => {
+    console.log("handleSelect");
+    console.log(event);
   };
 
   render() {

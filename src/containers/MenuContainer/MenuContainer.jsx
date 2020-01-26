@@ -4,6 +4,7 @@ import "./MenuContainer.scss";
 
 import Entry from "../../components/Entry/Entry";
 import PhilPapers from "../PhilPapers/PhilPapers";
+import InPho from "../InPho/InPho";
 
 class MenuContainer extends Component {
   constructor(props) {
@@ -22,12 +23,23 @@ class MenuContainer extends Component {
     return (
       <div className="MenuContainer">
         {display === "entry" ? (
-          <Entry changeDisplay={this.changeDisplay} />
+          <Entry
+            changeDisplay={this.changeDisplay}
+            toggleLoader={this.props.toggleLoader}
+          />
         ) : null}
         {display === "philpapers" ? (
           <PhilPapers
             changeDisplay={this.changeDisplay}
             handleUp={this.props.handleUp}
+            toggleLoader={this.props.toggleLoader}
+          />
+        ) : null}
+        {display === "inpho" ? (
+          <InPho
+            changeDisplay={this.changeDisplay}
+            handleUp={this.props.handleUp}
+            toggleLoader={this.props.toggleLoader}
           />
         ) : null}
       </div>

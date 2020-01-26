@@ -6,7 +6,20 @@
   justify-content: space-between;
 
   .control {
-    background-color: #ccc;
-    padding: 15px;
+    // background-color: #ccc;
+    // padding: 10px;
+    cursor: alias;
+    background-size: cover;
+    width: 36px;
+    height: 36px;
+
+    &.back {
+      background-image: url(../../assets/icons/keyboard_backspace-24px.svg);
+      background-size: cover;
+    }
+
+    &.hide {
+      background-image: url(../../assets/icons/close-24px.svg);
+    }
   }
 }

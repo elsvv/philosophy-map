@@ -1,12 +1,16 @@
 import React, { Component } from "react";
-import "./PhilPapers.scss";
+import axios from "axios";
+
+import "./InPho.scss";
 
 import Parser from "../Parser/Parser";
 import Button from "../../components/Button/Button";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Controls from "../../components/Controls/Controls";
 
-class PhilPapers extends Component {
+const url = "https://www.inphoproject.org/";
+
+class InPho extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,20 +21,108 @@ class PhilPapers extends Component {
       isWaiting: true,
       isFiltered: false,
       toFind: "",
-      preview: null
+      preview: null,
+      ideas: [],
+      thinkers: [],
+      other: []
     };
   }
 
-  handleGetPp = () => {
-    const key = "65bYvgX7lvNpObRF";
-    const id = "784298";
-    let proxyUrl = "https://cors-anywhere.herokuapp.com/",
-      targetUrl = `https://philpapers.org/philpapers/raw/categories.json?apiId=${id}&apiKey=${key}`;
-    fetch(proxyUrl + targetUrl)
-      .then(blob => blob.json())
-      .then(data => {
-        this.parseToVis(data);
+  handleGetEntity = () => {
+    axios
+      .get(`${url}entity.json`)
+      .then(res => {
+        const data = res.data.responseData.results,
+          ideas = [],
+          deas = [],
+          thinkers = [],
+          other = [];
+
+        data.forEach(el => {
+          if (el.type == "idea") {
+            ideas.push(el);
+          }
+          if (el.type == "thinker") {
+            thinkers.push(el);
+          }
+          // else {
+          //   other.push(el);
+          // }
+        });
+
+        this.setState({
+          ideas,
+          thinkers,
+          other,
+          isWaiting: false
+        });
+
+        console.log("ideas", this.state.ideas);
+        console.log("thinkers", this.state.thinkers);
+        console.log("other", this.state.other);
+
+        this.props.toggleLoader();
       })
+      .catch(error => {
+        console.log("Catch error:", error);
+      });
+  };
+
+  handleGetInPho = () => {
+    const ids = [];
+    // let path = "idea/20/graph";
+    let path = "taxonomy/2247";
+    axios
+      .get(
+        `${url}/${path}.json`
+        //   , {
+        //   params: {
+        //     sep: ""
+        //   }
+        // }
+      )
+      .then(res => console.log(res))
+      // complex then parser
+      .then(res => {
+        console.log(res);
+        const parsed = res.data.split("entropy*float")[1].split("\n\n");
+
+        const nodesInfo = parsed[0].split("\n");
+        nodesInfo.splice(0, 1);
+
+        const nodes = [];
+        nodesInfo.forEach((node, idx) => {
+          let nodeAr = node.split(' "');
+          nodes.push({
+            id: parseInt(nodeAr[0]),
+            label: nodeAr[1].replace(/^[\"]+|[\"]+$/g, ""),
+            sep: nodeAr[2] == '""' ? null : nodeAr[2]
+          });
+        });
+        console.log("nodesInfo", nodesInfo);
+
+        const edgesInfo = parsed[1].split("weight*float\n")[1].split("\n");
+        console.log("edgesInfo", edgesInfo);
+
+        const edges = [];
+        edgesInfo.forEach(edge => {
+          let edgeAr = edge.split(" ");
+          // console.log("edgeAr", edgeAr);
+          edges.push({
+            from: parseInt(edgeAr[0]),
+            to: parseInt(edgeAr[1])
+          });
+        });
+
+        this.setState({
+          nodes,
+          edges,
+          isWaiting: false
+        });
+
+        this.props.toggleLoader();
+      })
+
       .catch(er => {
         console.log("Catch error: ", er);
       });
@@ -82,7 +174,7 @@ class PhilPapers extends Component {
   };
 
   componentDidMount() {
-    this.handleGetPp();
+    this.handleGetEntity();
   }
 
   passUp = (nodes, edges) => {
@@ -192,8 +284,8 @@ class PhilPapers extends Component {
       <div className="philpapers-container">
         <Controls controls={controls} />
         <div className="title-container">
-          <h1 className="title">PhilPapers</h1>
-          <p className="text">PhilPapers Component</p>
+          <h1 className="title">Internet Philosophy Ontology project</h1>
+          {/*<p className="text">PhilPapers Component</p>*/}
           <p className="pick">Pick data-source:</p>
         </div>
 
@@ -207,7 +299,7 @@ class PhilPapers extends Component {
           <>
             <Button
               text={message}
-              data="philpapers"
+              data="inpho"
               handleClick={() => this.passUp(nodes, edges)}
             />
           </>
@@ -221,4 +313,4 @@ class PhilPapers extends Component {
   }
 }
 
-export default PhilPapers;
+export default InPho;

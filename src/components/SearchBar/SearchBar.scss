@@ -1,0 +1,36 @@
+.searchbar-container {
+  margin-left: 10px;
+  .searchbar {
+    margin-bottom: 10px;
+  }
+
+  ul {
+    // border: 0.5px solid #ccc;
+    // padding: 0 10px;
+    margin-top: 10px;
+    max-height: 400px;
+    overflow: auto;
+  }
+
+  li {
+    // margin: 10px 0;
+    margin-right: 10px;
+    padding: 10px;
+    cursor: help;
+    // border: 0.5px solid #656565;
+    // border-radius: 20px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: inset 5px 5px 0px rgba(0, 0, 0, 0.7);
+      text-decoration: underline;
+      background-color: #fff;
+      // color: #fff;
+      // background: radial-gradient(
+      //   43.31% 50% at 50% 50%,
+      //   #2d8dff 32.29%,
+      //   rgba(255, 255, 255, 0) 100%
+      // );
+    }
+  }
+}

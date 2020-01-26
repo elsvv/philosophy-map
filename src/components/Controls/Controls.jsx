@@ -4,16 +4,14 @@ import "./Controls.scss";
 const Controls = props => {
   const controls = props.controls.map((control, idx) => {
     return (
-      <li
+      <div
         key={idx}
-        className="control"
+        className={`control ${control.name}`}
         onClick={() => control.handler(control.arg)}
-      >
-        {control.name}
-      </li>
+      ></div>
     );
   });
-  return <ul className="controls-container">{controls}</ul>;
+  return <div className="controls-container">{controls}</div>;
 };
 
 export default Controls;

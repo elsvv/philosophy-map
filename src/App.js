@@ -27,77 +27,27 @@ class App extends React.Component {
       edges: [],
       graph: null,
       graphRender: false,
-      toFind: ""
+      loading: false
     };
   }
-  //
-  // handleGraph = data => {
-  //   console.log("1_in handleGraph:", data);
-  //   const { nodes, edges } = data;
-  //   console.log("2_in handleGraph:", nodes, edges);
-  //
-  //   this.setState({
-  //     nodes,
-  //     edges
-  //   });
-  // };
-  //
-  // handleSubmit = event => {
-  //   event.preventDefault();
-  //   const { nodes, toFind, edges } = this.state;
-  //   console.log("toFind", toFind);
-  //   console.log("nodes", nodes);
-  //   const resNodes = nodes.filter(node =>
-  //     node.label.toLowerCase().includes(toFind)
-  //   );
-  //   const searchIds = [];
-  //   resNodes.forEach(node => {
-  //     node.color = "#ffe";
-  //     node.value = 50000000;
-  //     searchIds.push(node.id);
-  //   });
-  //   console.log("searchIds", searchIds);
-  //   console.log("edges", edges);
-  //   const resEdges = edges.filter(edge => {
-  //     return searchIds.includes(edge.to) || searchIds.includes(edge.from);
-  //   });
-  //   console.log("resEdges", resEdges);
-  //
-  //   const childSet = new Set();
-  //   resEdges.forEach(edge => {
-  //     if (!(childSet.has(edge.to) || childSet.has(edge.from))) {
-  //       childSet.add(edge.to);
-  //       childSet.add(edge.from);
-  //     }
-  //   });
-  //   const childIds = [...childSet];
-  //
-  //   console.log("resNodes PREV", resNodes);
-  //
-  //   nodes.forEach(node => {
-  //     if (childIds.includes(node.id) && !resNodes.includes(node)) {
-  //       resNodes.push(node);
-  //     }
-  //   });
-  //
-  //   console.log("resNodes LAST", resNodes);
-  //
-  //   this.setState({ nodes: resNodes, edges: resEdges });
-  // };
-  //
+
   handleUp = (nodes, edges) => {
     const { graphRender } = this.state;
-    this.setState({ nodes, edges, graphRender: !graphRender });
+    this.setState({ nodes, edges, graphRender: true });
+    // console.log("this.state.graphRender", this.state.graphRender);
+    // this.setState({ graphRender: false });
+    // console.log("this.state.nodes", this.state.nodes);
+    // this.setState({ graphRender: !graphRender });
+    // console.log("this.state.graphRender", this.state.graphRender);
+  };
+
+  toggleLoader = () => {
+    const { loading } = this.state;
+    this.setState({ loading: !loading });
   };
 
   render() {
-    // console.log("nodes: ", nodes);
-    // console.log("edges: ", edges);
-    const { graphRender } = this.state;
-
-    if (false) {
-      return <Loader />;
-    }
+    const { graphRender, loading } = this.state;
 
     return (
       <div className="App">
@@ -109,7 +59,12 @@ class App extends React.Component {
             />
           ) : null}
 
-          <MenuContainer handleUp={this.handleUp} />
+          {loading ? <Loader /> : null}
+
+          <MenuContainer
+            toggleLoader={this.toggleLoader}
+            handleUp={this.handleUp}
+          />
           {/*  <Draggable>
             <div className="draggable">
               <MenuContainer handleUp={this.handleUp} />
