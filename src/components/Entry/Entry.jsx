@@ -24,13 +24,13 @@ const Entry = props => {
       </div>
       <div className="button-set">
         <Button
-          text="PhilPapers.org API"
-          data="philpapers"
+          text="InPho project API"
+          data="inpho"
           handleClick={props.changeDisplay}
         />
         <Button
-          text="InPho project API"
-          data="inpho"
+          text="PhilPapers.org API"
+          data="philpapers"
           handleClick={props.changeDisplay}
         />
       </div>
