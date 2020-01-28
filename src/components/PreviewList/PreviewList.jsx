@@ -1,0 +1,25 @@
+import React from "react";
+
+const PreviewList = props => {
+  const preview = props.preview
+    ? props.preview.map(prev => {
+        return (
+          <li key={prev.id} data-id={prev.id} onClick={props.handleOption}>
+            {prev.label}
+          </li>
+        );
+      })
+    : null;
+
+  if (!preview) {
+    return null;
+  }
+
+  return (
+    <div className="Preview">
+      <ul>{preview}</ul>
+    </div>
+  );
+};
+
+export default PreviewList;

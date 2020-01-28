@@ -11,7 +11,7 @@ const Loader = props => {
   let [polygon, setPolygon] = useState(null);
 
   const handleLoad = () => {
-    let period = 75;
+    let period = 110;
     let polCount = 0;
     for (let i = 0; i < Polygons.length; i++) {
       const timer = () =>

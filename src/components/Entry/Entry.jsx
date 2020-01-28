@@ -13,7 +13,7 @@ const Entry = props => {
 
   return (
     <div className="Entry">
-      <div className="title-container">
+      <div className="text-container">
         <h1 className="title">Philosophy map</h1>
         <p className="text">
           <span>H</span>ere you can observe philosophy. This{"\u00A0"}app uses

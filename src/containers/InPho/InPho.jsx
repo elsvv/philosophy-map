@@ -236,7 +236,6 @@ class InPho extends Component {
     console.log("handleOption");
     const selectedId = parseInt(event.target.dataset.id);
     const selectedLabel = event.target.innerHTML;
-    console.log("selectedId", selectedId);
     axios
       .get(`${url}/entity/${selectedId}.json`)
       .then(res => {
@@ -246,19 +245,15 @@ class InPho extends Component {
         const nodes = [],
           nodesIds = [],
           edges = [];
+
+        // THINKER PARSER
         if (selectedData.type === "thinker") {
           const { thinkers } = this.state;
-          console.log("thinkers", thinkers);
 
           selectedData.influenced.forEach(influenced => {
             edges.push({ from: selectedId, to: influenced });
-          });
-          selectedData.influenced_by.forEach(influenced_by => {
-            edges.push({ from: influenced_by, to: selectedId });
-          });
-          selectedData.influenced.forEach(id => {
             for (let thinker of thinkers) {
-              if (thinker.ID == id) {
+              if (thinker.ID == influenced) {
                 nodes.push({
                   id: thinker.ID,
                   label: thinker.label,
@@ -268,9 +263,15 @@ class InPho extends Component {
               }
             }
           });
-          selectedData.influenced_by.forEach(id => {
+          selectedData.influenced_by.forEach(influenced_by => {
+            edges.push({ from: influenced_by, to: selectedId });
             for (let thinker of thinkers) {
-              if (thinker.ID == id) {
+              if (selectedData.influenced.includes(thinker.ID)) {
+                nodes.find(node => node.id == thinker.ID).group =
+                  "influenced_by_and_influenced_by";
+                continue;
+              }
+              if (thinker.ID == influenced_by) {
                 nodes.push({
                   id: thinker.ID,
                   label: thinker.label,
@@ -280,17 +281,58 @@ class InPho extends Component {
               }
             }
           });
-          nodes.unshift({ id: selectedId, label: selectedLabel });
-
-          console.log("nodes", nodes);
-          console.log("edges", edges);
-          this.setState({ nodes, edges, selectedData });
-
-          this.passUp(nodes, edges);
-          this.props.handleSelectedUp(selectedData);
-          this.props.infoToggle(true);
-          return;
+          console.log(
+            "sum",
+            selectedData.influenced.length + selectedData.influenced_by.length
+          );
         }
+        // IDEA PARSER
+        if (selectedData.type === "idea") {
+          const { ideas } = this.state;
+
+          selectedData.occurrences.forEach(occurrence => {
+            edges.push({ from: occurrence, to: selectedId });
+            for (let idea of ideas) {
+              if (idea.ID == occurrence) {
+                nodes.push({
+                  id: idea.ID,
+                  label: idea.label,
+                  group: "occurrences"
+                });
+                break;
+              }
+            }
+          });
+          selectedData.hyponyms.forEach(hyp => {
+            edges.push({ from: selectedId, to: hyp });
+            for (let idea of ideas) {
+              if (selectedData.occurrences.includes(idea.ID)) {
+                nodes.find(node => node.id == idea.ID).group =
+                  "occurrences_and_hyponyms";
+                continue;
+              }
+              if (idea.ID == hyp) {
+                nodes.push({
+                  id: idea.ID,
+                  label: idea.label,
+                  group: "hyponyms"
+                });
+                break;
+              }
+            }
+          });
+        }
+
+        nodes.push({ id: selectedId, label: selectedLabel });
+
+        console.log("nodes", nodes);
+        console.log("edges", edges);
+        this.setState({ nodes, edges, selectedData });
+
+        this.passUp(nodes, edges);
+        this.props.handleSelectedUp(selectedData);
+        this.props.infoToggle(true);
+        return;
       })
       .catch(error => console.log("Catch error:", error));
     // const { parsedEdges, parsedNodes } = this.state;
@@ -342,7 +384,7 @@ class InPho extends Component {
     return (
       <div className="inpho-container">
         <Controls controls={controls} />
-        <div className="title-container">
+        <div className="text-container">
           <h1 className="title">Internet Philosophy Ontology project</h1>
           {/*<p className="text">PhilPapers Component</p>*/}
           <p className="pick">Pick data-source:</p>

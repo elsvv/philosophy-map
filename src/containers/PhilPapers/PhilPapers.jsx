@@ -191,7 +191,7 @@ class PhilPapers extends Component {
     return (
       <div className="philpapers-container">
         <Controls controls={controls} />
-        <div className="title-container">
+        <div className="text-container">
           <h1 className="title">PhilPapers</h1>
           <p className="text">PhilPapers Component</p>
           <p className="pick">Pick data-source:</p>

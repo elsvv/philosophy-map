@@ -58,7 +58,7 @@ class App extends React.Component {
         <ParserContext.Provider>
           {displayInfo ? (
             <InfoContainer
-              {...selectedData}
+              selectedData={selectedData}
               infoToggle={this.infoToggle}
               toggleLoader={this.toggleLoader}
               handleUp={this.handleUp}

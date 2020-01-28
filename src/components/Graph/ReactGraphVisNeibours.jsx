@@ -55,7 +55,7 @@ class ReactGraphVisNeibours extends Component {
         interaction: {
           hover: true,
           tooltipDelay: 200,
-          hideEdgesOnDrag: true,
+          // hideEdgesOnDrag: true,
           hoverConnectedEdges: true
         }
         // physics: {
@@ -84,10 +84,6 @@ class ReactGraphVisNeibours extends Component {
           this.handleSelect(event);
         },
         click: event => {}
-        // ,
-        // deselectNode: event => {
-        //   this.handleDeselectNode;
-        // }
       },
       network: null,
       highlightActive: false
@@ -100,7 +96,6 @@ class ReactGraphVisNeibours extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // this.setState({ nodes: nextProps.nodes, edges: nextProps.edges });
     if (nextProps.nodes != this.props.nodes) {
       console.log("nextProps UPDATE");
       this.state.network.setData({
