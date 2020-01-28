@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import "./ThinkerContainer.scss";
+import "./ThinkerInfo.scss";
 
-const ThinkerContainer = props => {
+const ThinkerInfo = props => {
   const { birth_strings, death_strings, nationalities, professions } = props;
 
   return (
-    <div className="ThinkerContainer">
+    <div className="ThinkerInfo">
       <dl className="biography">
         <div className="birth-date">
           <dt>Birth date:{"\u00A0"}</dt>
@@ -28,4 +28,4 @@ const ThinkerContainer = props => {
   );
 };
 
-export default ThinkerContainer;
+export default ThinkerInfo;

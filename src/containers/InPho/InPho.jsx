@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 
 import "./InPho.scss";
+import { taxonomyNodes, taxonomyEdges } from "../../components/Graph/taxonomy";
 
 import Parser from "../Parser/Parser";
 import Button from "../../components/Button/Button";
@@ -14,6 +15,8 @@ class InPho extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      taxonomyNodes,
+      taxonomyEdges,
       parsedNodes: null,
       parsedEdges: null,
       nodes: null,
@@ -377,8 +380,8 @@ class InPho extends Component {
       { name: "back", handler: this.props.changeDisplay, arg: "entry" },
       { name: "hide", handler: this.props.changeDisplay, arg: "hidden" }
     ];
-    const nodes = this.state.nodes || this.state.parsedNodes;
-    const edges = this.state.edges || this.state.parsedEdges;
+    const nodes = this.state.nodes || this.state.taxonomyNodes;
+    const edges = this.state.edges || this.state.taxonomyEdges;
     let message = isFiltered ? "Update graph" : "See full map";
 
     return (

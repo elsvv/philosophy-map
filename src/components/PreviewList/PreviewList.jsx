@@ -11,13 +11,15 @@ const PreviewList = props => {
       })
     : null;
 
+  const nothing = <div className="default">{props.default}</div>;
+
   if (!preview) {
     return null;
   }
 
   return (
     <div className="Preview">
-      <ul>{preview}</ul>
+      <ul>{preview.length > 0 ? preview : nothing}</ul>
     </div>
   );
 };

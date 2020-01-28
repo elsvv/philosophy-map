@@ -10,12 +10,16 @@ const SearchBar = props => {
         <input
           type="text"
           onChange={props.handleSearch}
-          placeholder="Kant, logic or China"
+          placeholder="Kant, logic or Chinese"
           // value={this.state.toFind}
         />
         <input type="submit" value="search" />
       </form>
-      <PreviewList handleOption={props.handleOption} preview={props.preview} />
+      <PreviewList
+        default={"nothing found"}
+        handleOption={props.handleOption}
+        preview={props.preview}
+      />
     </div>
   );
 };

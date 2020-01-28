@@ -1,13 +1,11 @@
 .controls-container {
-  position: absolute;
   width: 100%;
-  top: 0;
+  height: 40px;
   display: flex;
   justify-content: space-between;
+  border-bottom: 2px solid #000;
 
   .control {
-    // background-color: #ccc;
-    // padding: 10px;
     cursor: alias;
     background-size: cover;
     width: 36px;

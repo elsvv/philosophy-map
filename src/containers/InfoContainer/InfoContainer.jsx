@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "./InfoContainer.scss";
 
 import Controls from "../../components/Controls/Controls";
-import ThinkerContainer from "../ThinkerContainer/ThinkerContainer";
-import IdeaContainer from "../IdeaContainer/IdeaContainer";
+import ThinkerInfo from "../../components/ThinkerInfo/ThinkerInfo";
+import IdeaInfo from "../../components/IdeaInfo/IdeaInfo";
 
 class InfoContainer extends Component {
   constructor(props) {
@@ -21,9 +21,9 @@ class InfoContainer extends Component {
         <br />
         <h2>{label}</h2>
         {type == "thinker" ? (
-          <ThinkerContainer {...this.props.selectedData} />
+          <ThinkerInfo {...this.props.selectedData} />
         ) : (
-          <IdeaContainer {...this.props.selectedData} />
+          <IdeaInfo {...this.props.selectedData} />
         )}
       </div>
     );

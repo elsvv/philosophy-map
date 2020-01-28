@@ -3,10 +3,8 @@ import Draggable from "react-draggable";
 import "./App.css";
 
 import Parser from "./containers/Parser/Parser";
-// import Graph from "./components/Graph/Graph";
-import GraphCy from "./components/Graph/GraphCy";
-import GraphVis from "./components/Graph/GraphVis";
-import GraphVisPerf from "./components/Graph/GraphVisPerf";
+
+// import GraphVisPerf from "./components/Graph/GraphVisPerf";
 import ReactGraphVisNeibours from "./components/Graph/ReactGraphVisNeibours";
 import ParserContext from "./context/ParserContext";
 

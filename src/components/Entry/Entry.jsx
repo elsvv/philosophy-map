@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import "./Entry.scss";
 
 import Button from "../Button/Button";
+import Controls from "../Controls/Controls";
 
 const Entry = props => {
   useEffect(() => {
@@ -11,8 +12,14 @@ const Entry = props => {
     };
   }, []);
 
+  const controls = [
+    { name: "info", handler: null, arg: "info" },
+    { name: "github", handler: null, arg: "github" }
+  ];
+
   return (
     <div className="Entry">
+      <Controls controls={controls} />
       <div className="text-container">
         <h1 className="title">Philosophy map</h1>
         <p className="text">
