@@ -4,39 +4,10 @@
   left: 20px;
   width: 435px;
   border: 2px solid #000;
-  border-radius: 5px;
+  border-radius: 4px;
   background-color: inherit;
   background: rgba(255, 255, 255, 0.2);
   box-sizing: border-box;
   font-size: 18px;
   backdrop-filter: blur(5px);
-
-  // &:hover {
-  //   border: 0.5px solid #000000;
-  // }
-
-  .text-container {
-    // height: 223px;
-    margin: 20px 30px 60px 20px;
-
-    .title {
-      font-size: 3rem;
-      font-weight: bold;
-    }
-
-    .text {
-      margin-top: 20px;
-      margin-bottom: 60px;
-      line-height: 140%;
-
-      span {
-        font-size: 20px;
-      }
-    }
-
-    .pick {
-      font-size: 22px;
-      font-weight: bold;
-    }
-  }
 }

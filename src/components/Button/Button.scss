@@ -1,9 +1,11 @@
 .button {
   height: 80px;
-  border: 2px solid #000;
+  border: none;
+  box-shadow: 0 -2px 0 #000;
   line-height: 80px;
   text-align: center;
   color: #0000ff;
+  background-color: #fff;
   cursor: alias;
   transition: border-radius 0.2s ease-in;
 
@@ -13,10 +15,11 @@
     //   #2d8dff 32.29%,
     //   rgba(255, 255, 255, 0) 100%
     // );
+    // border: 2px solid #000;
+    // box-shadow: none;
+    box-shadow: inset 5px 5px 0px #000;
     text-decoration-line: underline;
-    border: 2px solid #000;
-    border-radius: 50%;
-    box-sizing: border-box;
+    // border-radius: 50%;
     // transform: rotate(-180deg);
   }
 }

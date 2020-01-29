@@ -1,4 +1,5 @@
 import React from "react";
+import "./PreviewList.scss";
 
 const PreviewList = props => {
   const preview = props.preview

@@ -1,7 +1,5 @@
-import React, { Component, useState, useContext } from "react";
+import React, { Component } from "react";
 import axios from "axios";
-
-import ParserContext from "../../context/ParserContext";
 
 const InPhO = "https://www.inphoproject.org";
 

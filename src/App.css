@@ -9,3 +9,16 @@ a {
 body {
   font-family: serif;
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fefefe;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #151515;
+  height: 40px;
+}

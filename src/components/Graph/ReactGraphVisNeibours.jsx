@@ -1,7 +1,5 @@
-import React, { Component, useContext, useState } from "react";
+import React, { Component } from "react";
 import Graph from "react-graph-vis";
-
-import ParserContext from "../../context/ParserContext";
 
 class ReactGraphVisNeibours extends Component {
   constructor(props) {
@@ -34,7 +32,6 @@ class ReactGraphVisNeibours extends Component {
         edges: {
           color: "#000",
           width: 0.15,
-          color: "#777",
           smooth: {
             type: "continuous"
           }

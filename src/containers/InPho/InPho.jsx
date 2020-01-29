@@ -8,6 +8,7 @@ import Parser from "../Parser/Parser";
 import Button from "../../components/Button/Button";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Controls from "../../components/Controls/Controls";
+import TextComponent from "../../components/TextComponent/TextComponent";
 
 const url = "https://www.inphoproject.org/";
 
@@ -27,7 +28,7 @@ class InPho extends Component {
       preview: null,
       ideas: [],
       thinkers: [],
-      other: [],
+      // other: [],
       selectedData: null
     };
   }
@@ -40,8 +41,9 @@ class InPho extends Component {
         const data = res.data.responseData.results,
           ideas = [],
           deas = [],
-          thinkers = [],
-          other = [];
+          thinkers = [];
+        // ,
+        // other = [];
 
         data.forEach(el => {
           if (el.type == "idea") {
@@ -50,15 +52,15 @@ class InPho extends Component {
           if (el.type == "thinker") {
             thinkers.push(el);
           }
-          if (el.type != "thinker" && el.type != "idea") {
-            other.push(el);
-          }
+          // if (el.type != "thinker" && el.type != "idea") {
+          //   other.push(el);
+          // }
         });
 
         this.setState({
           ideas,
           thinkers,
-          other,
+          // other,
           isWaiting: false
         });
         console.log("ideas", this.state.ideas);
@@ -73,7 +75,6 @@ class InPho extends Component {
   handleGetInPho = () => {
     console.log("handleGetInPho");
     const ids = [];
-    // let path = "idea/20/graph";
     let path = "idea/931/graph";
     axios
       .get(`${url}/${path}.json`)
@@ -231,8 +232,6 @@ class InPho extends Component {
     });
 
     this.setState({ nodes: resNodes, edges: resEdges, isFiltered: true });
-    // if (resNodes && resEdges) {
-    // }
   };
 
   handleOption = event => {
@@ -378,21 +377,22 @@ class InPho extends Component {
     const { isWaiting, isFiltered } = this.state;
     const controls = [
       { name: "back", handler: this.props.changeDisplay, arg: "entry" },
-      { name: "hide", handler: this.props.changeDisplay, arg: "hidden" }
+      { name: "mini", handler: this.props.changeDisplay, arg: "hidden" }
     ];
     const nodes = this.state.nodes || this.state.taxonomyNodes;
     const edges = this.state.edges || this.state.taxonomyEdges;
-    let message = isFiltered ? "Update graph" : "See full map";
+    let message = isFiltered ? "Update graph" : "See taxonomy";
 
     return (
       <div className="inpho-container">
         <Controls controls={controls} />
-        <div className="text-container">
-          <h1 className="title">Internet Philosophy Ontology project</h1>
-          {/*<p className="text">PhilPapers Component</p>*/}
-          <p className="pick">Pick data-source:</p>
-        </div>
-
+        <TextComponent
+          description="Data parsed via InPhO API. Here you can visualize the philosophy taxonomy with more then 250 nodes. Or search for concrete topic, its info and its relateted authors/concepts."
+          title="Internet Philosophy Ontology project"
+          pick="Start typing for a thinker/idea:"
+          waiting="data is loading..."
+          isWaiting={isWaiting}
+        />
         {!isWaiting ? (
           <>
             <SearchBar
@@ -408,10 +408,6 @@ class InPho extends Component {
             />
           </>
         ) : null}
-        {/*   <div className="button-set">
-           <Button text="PhilPapers.org API" data="philpapers" />
-          <Button text="InPhO API" style={{ background: "#C0C0C0" }} />
-        </div>*/}
       </div>
     );
   }

@@ -48,10 +48,10 @@ const taxonomyNodes = [
   { parent: 2305, label: "scientific methodology", id: 2229 },
   { parent: 2305, label: "epistemology of science", id: 2230 },
   { parent: 0, label: "philosophy of language", id: 2231 },
-  { parent: 0, label: "language and society", id: 2232 },
-  { parent: 0, label: "language learning", id: 2233 },
-  { parent: 0, label: "pragmatics", id: 2234 },
-  { parent: 0, label: "semantics", id: 2235 },
+  { parent: 2231, label: "language and society", id: 2232 },
+  { parent: 2231, label: "language learning", id: 2233 },
+  { parent: 2231, label: "pragmatics", id: 2234 },
+  { parent: 2231, label: "semantics", id: 2235 },
   { parent: 2326, label: "logical form", id: 2236 },
   { parent: 2235, label: "expression and idiom", id: 2237 },
   { parent: 2235, label: "reference and denotation", id: 2238 },
@@ -71,13 +71,13 @@ const taxonomyNodes = [
   { parent: 2249, label: "bioethics", id: 2252 },
   { parent: 2249, label: "ethics and art", id: 2253 },
   { parent: 2249, label: "ethics and information technology", id: 2254 },
-  { parent: 0, label: "history of logic", id: 2255 },
-  { parent: 0, label: "inductive logic and decision theory", id: 2256 },
-  { parent: 0, label: "logic and computation", id: 2257 },
-  { parent: 0, label: "logic and language", id: 2258 },
-  { parent: 0, label: "mathematical logic", id: 2259 },
-  { parent: 0, label: "philosophical logic", id: 2260 },
-  { parent: 0, label: "philosophy of logic", id: 2261 },
+  { parent: 2245, label: "history of logic", id: 2255 },
+  { parent: 2245, label: "inductive logic and decision theory", id: 2256 },
+  { parent: 2245, label: "logic and computation", id: 2257 },
+  { parent: 2245, label: "logic and language", id: 2258 },
+  { parent: 2245, label: "mathematical logic", id: 2259 },
+  { parent: 2245, label: "philosophical logic", id: 2260 },
+  { parent: 2245, label: "philosophy of logic", id: 2261 },
   { parent: 2247, label: "aesthetics", id: 2262 },
   { parent: 2247, label: "philosophy of art", id: 2263 },
   { parent: 2248, label: "moral epistemology", id: 2264 },
@@ -141,7 +141,7 @@ const taxonomyNodes = [
   { parent: 2317, label: "medieval philosophy of the soul", id: 2323 },
   { parent: 2317, label: "medieval theories of matter", id: 2324 },
   { parent: 2317, label: "motion and time", id: 2325 },
-  { parent: 0, label: "compositionality and logical form", id: 2326 },
+  { parent: 2231, label: "compositionality and logical form", id: 2326 },
   { parent: 2304, label: "philosophy of sociology", id: 2327 },
   { parent: 2302, label: "function and teleology", id: 2328 },
   { parent: 2302, label: "molecular biology and genetics", id: 2329 },
@@ -280,8 +280,8 @@ taxonomyNodes.forEach(node => {
       }
     } else {
       taxonomyEdges.push({
-        from: node.parent,
-        to: node.id
+        to: node.parent,
+        from: node.id
       });
     }
   }

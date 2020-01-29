@@ -3,21 +3,35 @@
   height: 40px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 0px 6px;
   border-bottom: 2px solid #000;
 
   .control {
-    cursor: alias;
     background-size: cover;
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
+
+    &:hover {
+      border-radius: 10%;
+      border: 2px solid black;
+    }
 
     &.back {
       background-image: url(../../assets/icons/keyboard_backspace-24px.svg);
-      background-size: cover;
+      cursor: pointer;
     }
 
     &.hide {
-      background-image: url(../../assets/icons/close-24px.svg);
+      background-image: url(../../assets/icons/close.svg);
+      cursor: alias;
+    }
+
+    &.mini {
+      background-image: url(../../assets/icons/maximize.svg);
+      background-size: cover;
+      // background-image: url(../../assets/icons/minimize.svg);
+      cursor: alias;
     }
   }
 }

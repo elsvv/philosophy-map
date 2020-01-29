@@ -2,6 +2,7 @@ import React from "react";
 import "./SearchBar.scss";
 
 import PreviewList from "../PreviewList/PreviewList";
+import searchIcon from "../../assets/icons/search.svg";
 
 const SearchBar = props => {
   return (
@@ -10,13 +11,15 @@ const SearchBar = props => {
         <input
           type="text"
           onChange={props.handleSearch}
-          placeholder="Kant, logic or Chinese"
+          placeholder="Kant, logic or feminism"
           // value={this.state.toFind}
         />
-        <input type="submit" value="search" />
+        <button type="submit">
+          <img src={searchIcon} />
+        </button>
       </form>
       <PreviewList
-        default={"nothing found"}
+        default={"Nothing found..."}
         handleOption={props.handleOption}
         preview={props.preview}
       />

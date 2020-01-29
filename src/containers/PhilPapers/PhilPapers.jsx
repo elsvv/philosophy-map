@@ -5,6 +5,7 @@ import Parser from "../Parser/Parser";
 import Button from "../../components/Button/Button";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Controls from "../../components/Controls/Controls";
+import TextComponent from "../../components/TextComponent/TextComponent";
 
 class PhilPapers extends Component {
   constructor(props) {
@@ -182,7 +183,7 @@ class PhilPapers extends Component {
     const { isWaiting, isFiltered } = this.state;
     const controls = [
       { name: "back", handler: this.props.changeDisplay, arg: "entry" },
-      { name: "hide", handler: this.props.changeDisplay, arg: "hidden" }
+      { name: "mini", handler: this.props.changeDisplay, arg: "hidden" }
     ];
     const nodes = this.state.nodes || this.state.parsedNodes;
     const edges = this.state.edges || this.state.parsedEdges;
@@ -191,20 +192,23 @@ class PhilPapers extends Component {
     return (
       <div className="philpapers-container">
         <Controls controls={controls} />
-        <div className="text-container">
-          <h1 className="title">PhilPapers</h1>
-          <p className="text">PhilPapers Component</p>
-          <p className="pick">Pick data-source:</p>
-        </div>
 
-        <SearchBar
-          handleSubmit={this.handleSubmit}
-          handleSearch={this.handleSearch}
-          preview={this.state.preview}
-          handleOption={this.handleOption}
+        <TextComponent
+          title="PhilPapers"
+          description="Data parsed via PhilPapers API. Here you can visualize the full map with more than 5.5 thousand nodes."
+          pick="Start typing for an idea:"
+          waiting="data is loading..."
+          isWaiting={isWaiting}
         />
+
         {!isWaiting ? (
           <>
+            <SearchBar
+              handleSubmit={this.handleSubmit}
+              handleSearch={this.handleSearch}
+              preview={this.state.preview}
+              handleOption={this.handleOption}
+            />
             <Button
               text={message}
               data="philpapers"
