@@ -29,7 +29,8 @@ class InPho extends Component {
       ideas: [],
       thinkers: [],
       // other: [],
-      selectedData: null
+      selectedData: null,
+      toRender: null
     };
   }
 
@@ -184,54 +185,127 @@ class InPho extends Component {
     this.setState({ toFind: search });
 
     if (search.length >= 3) {
-      const previewIdeas = this.state.ideas
-        .filter(node => node.label.toLowerCase().includes(search))
-        .reduce((ac, el) => [...ac, { label: el.label, id: el.ID }], []);
+      let previewIdeas = this.state.ideas.filter(node =>
+        node.label.toLowerCase().includes(search)
+      );
+      let previewIds = previewIdeas.map(el => el.ID);
+      previewIdeas = previewIdeas.reduce(
+        (ac, el) => [...ac, { label: el.label, id: el.ID }],
+        []
+      );
 
-      const previewThinkers = this.state.thinkers
-        .filter(node => node.label.toLowerCase().includes(search))
-        .reduce((ac, el) => [...ac, { label: el.label, id: el.ID }], []);
+      let previewThinkers = this.state.thinkers.filter(node =>
+        node.label.toLowerCase().includes(search)
+      );
+      previewIds = [...previewIds, ...previewThinkers.map(el => el.ID)];
+      previewThinkers = previewThinkers.reduce(
+        (ac, el) => [...ac, { label: el.label, id: el.ID }],
+        []
+      );
 
-      let preview = [...previewIdeas, ...previewThinkers];
-      return this.setState({ preview });
+      const preview = [...previewIdeas, ...previewThinkers];
+      return this.setState({ preview, previewIds });
     }
     this.setState({ preview: null });
   };
 
   handleSubmit = event => {
     event.preventDefault();
-    const { parsedNodes, toFind, parsedEdges } = this.state;
+    const { previewIds } = this.state;
 
-    const resNodes = parsedNodes.filter(node =>
-      node.label.toLowerCase().includes(toFind)
-    );
-    const searchIds = [];
-    resNodes.forEach(node => {
-      node.color = "#fff";
-      node.value = 5000;
-      searchIds.push(node.id);
+    let toRender = {};
+    console.log("START MASS GET");
+    previewIds.forEach(id => {
+      axios.get(`${url}/entity/${id}.json`).then(idRes => {
+        const idData = idRes.data;
+        if (idData.type === "idea") {
+          const {
+            related,
+            instances,
+            hyponyms,
+            related_thinkers,
+            occurrences,
+            label
+          } = idData;
+
+          toRender[`n${id}`] = {
+            label,
+            related,
+            instances,
+            hyponyms,
+            related_thinkers,
+            occurrences
+          };
+        } else {
+          const {
+            label,
+            influenced,
+            influenced_by,
+            related_ideas,
+            related_thinkers
+          } = idData;
+
+          toRender[`n${id}`] = {
+            label,
+            influenced,
+            influenced_by,
+            related_ideas,
+            related_thinkers
+          };
+        }
+      });
     });
 
-    const resEdges = parsedEdges.filter(edge => {
-      return searchIds.includes(edge.to) || searchIds.includes(edge.from);
-    });
+    console.log("FINISH MASS GET");
+    console.log("toRender", toRender);
+    this.setState({ toRender });
+    setTimeout(() => this.handleCollectAll(), 5000);
+    // this.handleCollectAll();
+  };
 
-    const childSet = new Set();
-    resEdges.forEach(edge => {
-      if (!(childSet.has(edge.to) || childSet.has(edge.from))) {
-        childSet.add(edge.to);
-        childSet.add(edge.from);
+  handleCollectAll = () => {
+    const { previewIds, toRender, ideas, thinkers } = this.state;
+    let nodesIds = [],
+      nodes = [],
+      edges = [];
+    previewIds.forEach(id => {
+      console.log(toRender[`n${id}`]);
+      delete toRender[`n${id}`].label;
+      const idList = Object.values(toRender[`n${id}`]);
+      for (let li of idList) {
+        console.log("li", li);
+        for (let to of li) {
+          console.log("to", to);
+          edges.push({
+            from: id,
+            to
+          });
+        }
+        nodesIds.push(...li);
       }
     });
-    const childIds = [...childSet];
+    nodesIds = [...new Set(nodesIds)];
 
-    parsedNodes.forEach(node => {
-      if (childIds.includes(node.id) && !resNodes.includes(node)) {
-        resNodes.push(node);
+    // Без групп пока
+    nodesIds.forEach(nId => {
+      let isImportant = false;
+      if (previewIds.includes(nId)) {
+        isImportant = true;
       }
+      const node =
+        ideas.find(idea => idea.ID === nId) ||
+        thinkers.find(th => th.ID === nId);
+      nodes.push({
+        id: node.ID,
+        label: node.label,
+        // value: isImportant ? 1000000 : 20000
+        size: isImportant ? 35 : 15
+      });
     });
 
-    this.setState({ nodes: resNodes, edges: resEdges, isFiltered: true });
+    console.log(nodes);
+    this.setState({ nodes, edges });
+    this.passUp(nodes, edges);
   };
 
   handleOption = event => {
@@ -242,10 +316,8 @@ class InPho extends Component {
       .get(`${url}/entity/${selectedId}.json`)
       .then(res => {
         const selectedData = res.data;
-        console.log(selectedData);
-
+        console.log("selectedData:", selectedData);
         const nodes = [],
-          nodesIds = [],
           edges = [];
 
         // THINKER PARSER
@@ -253,7 +325,7 @@ class InPho extends Component {
           const { thinkers } = this.state;
 
           selectedData.influenced.forEach(influenced => {
-            edges.push({ from: selectedId, to: influenced });
+            edges.push({ to: selectedId, from: influenced });
             for (let thinker of thinkers) {
               if (thinker.ID == influenced) {
                 nodes.push({
@@ -266,7 +338,7 @@ class InPho extends Component {
             }
           });
           selectedData.influenced_by.forEach(influenced_by => {
-            edges.push({ from: influenced_by, to: selectedId });
+            edges.push({ to: influenced_by, from: selectedId });
             for (let thinker of thinkers) {
               if (selectedData.influenced.includes(thinker.ID)) {
                 nodes.find(node => node.id == thinker.ID).group =
@@ -283,10 +355,6 @@ class InPho extends Component {
               }
             }
           });
-          console.log(
-            "sum",
-            selectedData.influenced.length + selectedData.influenced_by.length
-          );
         }
         // IDEA PARSER
         if (selectedData.type === "idea") {
@@ -337,36 +405,6 @@ class InPho extends Component {
         return;
       })
       .catch(error => console.log("Catch error:", error));
-    // const { parsedEdges, parsedNodes } = this.state;
-    //
-    // let relatedIds = [];
-    // let edges = [];
-    //
-    // parsedEdges.forEach(edge => {
-    //   if (edge.to == selectedId || edge.from == selectedId) {
-    //     edges.push(edge);
-    //     relatedIds.push(edge.to);
-    //     relatedIds.push(edge.from);
-    //   }
-    // });
-    //
-    // let nodes = [];
-    // relatedIds.forEach(id => {
-    //   parsedNodes.forEach(node => {
-    //     if (node.id == id) {
-    //       nodes.push(node);
-    //     }
-    //   });
-    // });
-    //
-    // nodes = [...new Set(nodes)];
-    //
-    // relatedIds = [...new Set(relatedIds)];
-    // console.log("relatedIds", relatedIds);
-    // console.log("nodes", nodes);
-    //
-    // this.setState({ nodes, edges, isFiltered: true });
-    // this.passUp(nodes, edges);
   };
 
   passUp = (nodes, edges) => {

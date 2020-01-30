@@ -16,12 +16,12 @@ class ReactGraphVisNeibours extends Component {
           shape: "dot",
           scaling: {
             min: 5,
-            max: 5,
+            max: 50,
             label: {
-              min: 8,
-              max: 30,
-              drawThreshold: 12,
-              maxVisible: 20
+              min: 6,
+              max: 300,
+              drawThreshold: 5,
+              maxVisible: 4000
             }
           },
           font: {
@@ -30,8 +30,8 @@ class ReactGraphVisNeibours extends Component {
           }
         },
         edges: {
-          color: "#000",
-          width: 0.15,
+          color: "#C0C0C0",
+          width: 0.05,
           smooth: {
             type: "continuous"
           }
@@ -44,15 +44,14 @@ class ReactGraphVisNeibours extends Component {
           stabilization: false
           // ,
           // barnesHut: {
-          //   gravitationalConstant: 80,
-          //   springConstant: 0.00001,
-          //   springLength: 1
+          //   gravitationalConstant: 0.008,
+          //   springConstant: 0.00000000001,
+          //   springLength: 1000
           // }
         },
         interaction: {
           hover: true,
           tooltipDelay: 200,
-          // hideEdgesOnDrag: true,
           hoverConnectedEdges: true
         }
         // physics: {

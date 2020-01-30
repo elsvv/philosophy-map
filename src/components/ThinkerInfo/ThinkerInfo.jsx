@@ -1,8 +1,18 @@
 import React from "react";
 import "./ThinkerInfo.scss";
 
+import LinkSet from "../LinkSet/LinkSet";
+
 const ThinkerInfo = props => {
-  const { birth_strings, death_strings, nationalities, professions } = props;
+  const {
+    birth_strings,
+    death_strings,
+    nationalities,
+    professions,
+    wiki,
+    sep_dir,
+    label
+  } = props;
 
   return (
     <div className="ThinkerInfo">
@@ -24,6 +34,7 @@ const ThinkerInfo = props => {
           <dd>{professions.join(", ")}</dd>
         </div>
       </dl>
+      <LinkSet wiki={wiki} pp={label} sep={sep_dir} />
     </div>
   );
 };
