@@ -6,7 +6,6 @@ import Parser from "./containers/Parser/Parser";
 
 // import GraphVisPerf from "./components/Graph/GraphVisPerf";
 import ReactGraphVisNeibours from "./components/Graph/ReactGraphVisNeibours";
-import ParserContext from "./context/ParserContext";
 
 import MenuContainer from "./containers/MenuContainer/MenuContainer";
 import InfoContainer from "./containers/InfoContainer/InfoContainer";
@@ -26,7 +25,8 @@ class App extends React.Component {
       graphRender: false,
       loading: false,
       selectedData: null,
-      displayInfo: false
+      displayInfo: false,
+      doubleClicked: null
     };
   }
 
@@ -48,41 +48,51 @@ class App extends React.Component {
     this.setState({ displayInfo: bool });
   };
 
+  nodeUp = doubleClicked => {
+    this.setState({ doubleClicked });
+  };
+
   render() {
-    const { graphRender, loading, selectedData, displayInfo } = this.state;
+    const {
+      graphRender,
+      loading,
+      selectedData,
+      displayInfo,
+      doubleClicked
+    } = this.state;
 
     return (
       <div className="App">
-        <ParserContext.Provider>
-          {displayInfo ? (
-            <InfoContainer
-              selectedData={selectedData}
-              infoToggle={this.infoToggle}
-              toggleLoader={this.toggleLoader}
-              handleUp={this.handleUp}
-            />
-          ) : null}
-          {graphRender ? (
-            <ReactGraphVisNeibours
-              nodes={this.state.nodes}
-              edges={this.state.edges}
-            />
-          ) : null}
-
-          {loading ? <Loader /> : null}
-
-          <MenuContainer
+        {displayInfo ? (
+          <InfoContainer
+            selectedData={selectedData}
             infoToggle={this.infoToggle}
-            handleSelectedUp={this.handleSelectedUp}
             toggleLoader={this.toggleLoader}
             handleUp={this.handleUp}
           />
-          {/*  <Draggable>
+        ) : null}
+        {graphRender ? (
+          <ReactGraphVisNeibours
+            nodeUp={this.nodeUp}
+            nodes={this.state.nodes}
+            edges={this.state.edges}
+          />
+        ) : null}
+
+        {loading ? <Loader /> : null}
+
+        <MenuContainer
+          doubleClicked={doubleClicked}
+          infoToggle={this.infoToggle}
+          handleSelectedUp={this.handleSelectedUp}
+          toggleLoader={this.toggleLoader}
+          handleUp={this.handleUp}
+        />
+        {/*  <Draggable>
             <div className="draggable">
               <MenuContainer handleUp={this.handleUp} />
             </div>
           </Draggable>*/}
-        </ParserContext.Provider>
       </div>
     );
   }

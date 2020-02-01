@@ -29,7 +29,12 @@
 
     &.mini {
       background-image: url(../../assets/icons/maximize.svg);
-      background-size: cover;
+      // background-image: url(../../assets/icons/minimize.svg);
+      cursor: alias;
+    }
+
+    &.max {
+      background-image: url(../../assets/icons/web.svg);
       // background-image: url(../../assets/icons/minimize.svg);
       cursor: alias;
     }

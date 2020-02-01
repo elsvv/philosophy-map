@@ -3,9 +3,9 @@
   position: absolute;
   z-index: 1000;
   bottom: 25px;
-  right: 50px;
-  width: 440px;
-  height: 300px;
+  right: 25px;
+  width: 340px;
+  min-height: 200px;
   border: 2px solid #000000;
   background-color: #fff;
   background: rgba(255, 255, 255, 0.2);
@@ -13,34 +13,26 @@
   font-size: 20px;
   backdrop-filter: blur(5px);
 
-  .controls-container {
-    flex-direction: row-reverse;
+  .info {
+    padding: 10px;
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
   }
 
-  .text-container {
-    margin-left: 50px;
-    margin-top: 35px;
-    margin: 35px 50px 25px;
+  .biography {
+    font-size: 16px;
+    margin-bottom: 10px;
 
-    .title {
-      font-size: 3rem;
-      font-weight: bold;
-      // text-decoration: underline;
+    div {
+      margin-bottom: 2px;
     }
+  }
 
-    .text {
-      margin-top: 15px;
-      // font-size: 20px;
-
-      span {
-        font-size: 24px;
-      }
-    }
-
-    .pick {
-      margin-top: 70px;
-      font-size: 24px;
-      font-weight: bold;
-    }
+  .controls-container {
+    flex-direction: row-reverse;
   }
 }

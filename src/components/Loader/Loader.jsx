@@ -11,7 +11,7 @@ const Loader = props => {
   let [polygon, setPolygon] = useState(null);
 
   const handleLoad = () => {
-    let period = 110;
+    let period = 130;
     let polCount = 0;
     for (let i = 0; i < Polygons.length; i++) {
       const timer = () =>
@@ -44,7 +44,7 @@ const Loader = props => {
     <div
       className={container}
       style={{
-        background: `radial-gradient(50% 50% at 50% 50%, #469bff ${degree}%, rgba(255, 255, 255, 0) 100%)`,
+        background: `radial-gradient(50% 50% at 50% 50%, #007296 ${degree}%, rgba(255, 255, 255, 0) 100%)`,
         transform: `translate(-50%, -50%) rotate(${rotDeg / 10}deg)`
       }}
       onClick={handleLoad}

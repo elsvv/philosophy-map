@@ -1,13 +1,23 @@
 import React, { Component } from "react";
 
-class IdeaInfo extends Component {
-  constructor(props) {
-    super(props);
-    this.state = null;
-  }
-  render() {
-    return <div className="IdeaInfo">IdeaInfo component!</div>;
-  }
-}
+import LinkSet from "../LinkSet/LinkSet";
+
+const IdeaInfo = props => {
+  const {
+    // birth_strings,
+    // death_strings,
+    // nationalities,
+    // professions,
+    // wiki,
+    sep_dir,
+    label
+  } = props;
+
+  return (
+    <div className="IdeaInfo">
+      <LinkSet wiki={label} pp={label} sep={sep_dir} />
+    </div>
+  );
+};
 
 export default IdeaInfo;

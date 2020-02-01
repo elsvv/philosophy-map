@@ -4,8 +4,10 @@
   box-shadow: 0 -2px 0 #000;
   line-height: 80px;
   text-align: center;
-  color: #0000ff;
-  background-color: #fff;
+  color: #007296;
+  font-size: 20px;
+  font-weight: 300;
+
   cursor: alias;
   transition: border-radius 0.2s ease-in;
 
@@ -19,6 +21,7 @@
     // box-shadow: none;
     box-shadow: inset 5px 5px 0px #000;
     text-decoration-line: underline;
+    background-color: #fff;
     // border-radius: 50%;
     // transform: rotate(-180deg);
   }

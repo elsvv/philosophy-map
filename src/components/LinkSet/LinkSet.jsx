@@ -9,22 +9,21 @@ const wikiUrl = "https://en.wikipedia.org/wiki/";
 const ppUrl = "https://philpapers.org/s/";
 const sepUrl = "https://plato.stanford.edu/entries/";
 
+const funcLink = (url, entity, logo, id) => {
+  if (!entity) {
+    return null;
+  }
+  return (
+    <a key={id} href={`${url}${entity}`} target="_blank">
+      <img src={logo} />
+    </a>
+  );
+};
+
 const LinkSet = props => {
-  const wiki = props.wiki ? (
-    <a key="1" href={`${wikiUrl}${props.wiki}`} target="_blank">
-      <img src={wikiLogo} />
-    </a>
-  ) : null;
-  const pp = props.pp ? (
-    <a key="2" href={`${ppUrl}${props.pp}`} target="_blank">
-      <img src={ppLogo} />
-    </a>
-  ) : null;
-  const sep = props.sep ? (
-    <a key="3" href={`${sepUrl}${props.sep}`} target="_blank">
-      <img src={sepLogo} />
-    </a>
-  ) : null;
+  const wiki = funcLink(wikiUrl, props.wiki, wikiLogo, 1);
+  const pp = funcLink(ppUrl, props.pp, ppLogo, 2);
+  const sep = funcLink(sepUrl, props.sep, sepLogo, 3);
   const links = [wiki, pp, sep];
 
   return <div className="links-set">{links}</div>;

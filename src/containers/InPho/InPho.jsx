@@ -174,7 +174,12 @@ class InPho extends Component {
 
   componentDidMount() {
     this.handleGetEntity();
-    // this.handleGetInPho();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.doubleClicked != this.props.doubleClicked) {
+      this.handleRender(nextProps.doubleClicked);
+    }
   }
 
   handleSearch = event => {
@@ -204,17 +209,20 @@ class InPho extends Component {
       );
 
       const preview = [...previewIdeas, ...previewThinkers];
-      return this.setState({ preview, previewIds });
+      return this.setState({ preview, previewIds, isFiltered: true });
     }
-    this.setState({ preview: null });
+    this.setState({ preview: null, isFiltered: false });
   };
 
   handleSubmit = event => {
-    event.preventDefault();
+    if (event.preventDefault instanceof Function) {
+      event.preventDefault();
+    }
     const { previewIds } = this.state;
 
+    this.props.toggleLoader();
+
     let toRender = {};
-    console.log("START MASS GET");
     previewIds.forEach(id => {
       axios.get(`${url}/entity/${id}.json`).then(idRes => {
         const idData = idRes.data;
@@ -259,7 +267,7 @@ class InPho extends Component {
     console.log("FINISH MASS GET");
     console.log("toRender", toRender);
     this.setState({ toRender });
-    setTimeout(() => this.handleCollectAll(), 5000);
+    setTimeout(() => this.handleCollectAll(), 6000);
     // this.handleCollectAll();
   };
 
@@ -284,6 +292,7 @@ class InPho extends Component {
         nodesIds.push(...li);
       }
     });
+    nodesIds.push(...previewIds);
     nodesIds = [...new Set(nodesIds)];
 
     // Без групп пока
@@ -306,30 +315,41 @@ class InPho extends Component {
     console.log(nodes);
     this.setState({ nodes, edges });
     this.passUp(nodes, edges);
+    this.props.toggleLoader();
   };
 
   handleOption = event => {
     console.log("handleOption");
     const selectedId = parseInt(event.target.dataset.id);
-    const selectedLabel = event.target.innerHTML;
+    this.handleRender(selectedId);
+  };
+
+  handleRender = selectedId => {
     axios
       .get(`${url}/entity/${selectedId}.json`)
       .then(res => {
         const selectedData = res.data;
+
+        if (selectedData.type === "node") {
+          return this.handleRender(selectedData.idea);
+        }
+
+        const selectedLabel = selectedData.label;
         console.log("selectedData:", selectedData);
         const nodes = [],
           edges = [];
 
+        const { ideas, thinkers } = this.state;
+
         // THINKER PARSER
         if (selectedData.type === "thinker") {
-          const { thinkers } = this.state;
-
           selectedData.influenced.forEach(influenced => {
             edges.push({ to: selectedId, from: influenced });
             for (let thinker of thinkers) {
               if (thinker.ID == influenced) {
                 nodes.push({
                   id: thinker.ID,
+                  level: 1,
                   label: thinker.label,
                   group: "influenced"
                 });
@@ -337,17 +357,35 @@ class InPho extends Component {
               }
             }
           });
+
+          selectedData.related_ideas.forEach(relIdea => {
+            edges.push({ to: relIdea, from: selectedId });
+            for (let idea of ideas) {
+              if (idea.ID === relIdea) {
+                nodes.push({
+                  id: idea.ID,
+                  level: 2,
+                  label: idea.label,
+                  group: "related_ideas"
+                });
+                break;
+              }
+            }
+          });
+
           selectedData.influenced_by.forEach(influenced_by => {
             edges.push({ to: influenced_by, from: selectedId });
             for (let thinker of thinkers) {
               if (selectedData.influenced.includes(thinker.ID)) {
                 nodes.find(node => node.id == thinker.ID).group =
-                  "influenced_by_and_influenced_by";
+                  "influenced_and_influenced_by";
+                nodes.find(node => node.id == thinker.ID).level = 4;
                 continue;
               }
               if (thinker.ID == influenced_by) {
                 nodes.push({
                   id: thinker.ID,
+                  level: 3,
                   label: thinker.label,
                   group: "influenced_by"
                 });
@@ -358,8 +396,6 @@ class InPho extends Component {
         }
         // IDEA PARSER
         if (selectedData.type === "idea") {
-          const { ideas } = this.state;
-
           selectedData.occurrences.forEach(occurrence => {
             edges.push({ from: occurrence, to: selectedId });
             for (let idea of ideas) {
@@ -373,6 +409,21 @@ class InPho extends Component {
               }
             }
           });
+
+          selectedData.related_thinkers.forEach(relThinker => {
+            edges.push({ from: selectedId, to: relThinker });
+            for (let thinker of thinkers) {
+              if (thinker.ID === relThinker) {
+                nodes.push({
+                  id: thinker.ID,
+                  label: thinker.label,
+                  group: "related_thinkers"
+                });
+                break;
+              }
+            }
+          });
+
           selectedData.hyponyms.forEach(hyp => {
             edges.push({ from: selectedId, to: hyp });
             for (let idea of ideas) {
@@ -391,12 +442,41 @@ class InPho extends Component {
               }
             }
           });
+
+          selectedData.instances.forEach(ins => {
+            edges.push({ from: selectedId, to: ins });
+            for (let idea of ideas) {
+              if (
+                selectedData.occurrences.includes(idea.ID) &&
+                selectedData.hyponyms.includes(idea.ID)
+              ) {
+                nodes.find(node => node.id == idea.ID).group =
+                  "occurrences_hyponyms_and_instances";
+                continue;
+              }
+              if (selectedData.hyponyms.includes(idea.ID)) {
+                nodes.find(node => node.id == idea.ID).group =
+                  "hyponymss_and_instances";
+                continue;
+              }
+              if (selectedData.occurrences.includes(idea.ID)) {
+                nodes.find(node => node.id == idea.ID).group =
+                  "occurrences_and_instances";
+                continue;
+              }
+              if (idea.ID == ins) {
+                nodes.push({
+                  id: idea.ID,
+                  label: idea.label,
+                  group: "instances"
+                });
+                break;
+              }
+            }
+          });
         }
 
-        nodes.push({ id: selectedId, label: selectedLabel });
-
-        console.log("nodes", nodes);
-        console.log("edges", edges);
+        nodes.push({ id: selectedId, label: selectedLabel, level: 5 });
         this.setState({ nodes, edges, selectedData });
 
         this.passUp(nodes, edges);
@@ -413,17 +493,24 @@ class InPho extends Component {
 
   render() {
     const { isWaiting, isFiltered } = this.state;
-    const controls = [
-      { name: "back", handler: this.props.changeDisplay, arg: "entry" },
-      { name: "mini", handler: this.props.changeDisplay, arg: "hidden" }
-    ];
     const nodes = this.state.nodes || this.state.taxonomyNodes;
     const edges = this.state.edges || this.state.taxonomyEdges;
-    let message = isFiltered ? "Update graph" : "See taxonomy";
+    const buttonHandler = isFiltered
+      ? this.handleSubmit
+      : () => this.passUp(nodes, edges);
+    let message = isFiltered ? "See results' connections" : "See taxonomy";
+
+    if (this.props.draggie) {
+      return (
+        <div className="draggie">
+          <Controls controls={this.props.controls} />
+        </div>
+      );
+    }
 
     return (
       <div className="inpho-container">
-        <Controls controls={controls} />
+        <Controls controls={this.props.controls} />
         <TextComponent
           description="Data parsed via InPhO API. Here you can visualize the philosophy taxonomy with more then 250 nodes. Or search for concrete topic, its info and its relateted authors/concepts."
           title="Internet Philosophy Ontology project"
@@ -439,11 +526,7 @@ class InPho extends Component {
               preview={this.state.preview}
               handleOption={this.handleOption}
             />
-            <Button
-              text={message}
-              data="inpho"
-              handleClick={() => this.passUp(nodes, edges)}
-            />
+            <Button text={message} data="inpho" handleClick={buttonHandler} />
           </>
         ) : null}
       </div>

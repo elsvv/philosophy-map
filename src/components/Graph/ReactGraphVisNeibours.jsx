@@ -30,56 +30,71 @@ class ReactGraphVisNeibours extends Component {
           }
         },
         edges: {
-          color: "#C0C0C0",
+          color: "#007296",
           width: 0.05,
           smooth: {
             type: "continuous"
-          }
+          },
+          length: 150
         },
         groups: {
-          influenced: { color: { background: "#eee" } },
-          influenced_by: { color: { background: "#ddd" } }
+          influenced: { color: { background: "#EC8584" } },
+          influenced_by: { color: { background: "#8FBBFF" } },
+          related_ideas: { color: { background: "#FFFE54" } },
+          influenced_and_influenced_by: { color: { background: "#DDFFC3" } },
+          occurrences: { color: { background: "#FFCEAB" } },
+          related_thinkers: { color: { background: "#E37CF9" } },
+          occurrences_and_hyponyms: { color: { background: "#F3AB3E" } },
+          hyponyms: { color: { background: "#6C71F4" } },
+          occurrences_hyponyms_and_instances: {
+            color: { background: "#00F0FF" }
+          },
+          hyponymss_and_instances: { color: { background: "#458900" } },
+          occurrences_and_instances: { color: { background: "#FFFCB2" } },
+          instances: { color: { background: "#FFD4F1" } }
+        },
+        layout: {
+          improvedLayout: true
+          // hierarchical: {
+          //   enabled: true,
+          //   levelSeparation: 150,
+          //   nodeSpacing: 2000,
+          //   treeSpacing: 2000,
+          //   blockShifting: true,
+          //   edgeMinimization: true,
+          //   parentCentralization: true,
+          //   direction: "UD", // UD, DU, LR, RL
+          //   sortMethod: "hubsize" // hubsize, directed
+          // }
         },
         physics: {
           stabilization: false
-          // ,
-          // barnesHut: {
-          //   gravitationalConstant: 0.008,
-          //   springConstant: 0.00000000001,
-          //   springLength: 1000
-          // }
         },
         interaction: {
           hover: true,
           tooltipDelay: 200,
           hoverConnectedEdges: true
+        },
+        physics: {
+          stabilization: false,
+          barnesHut: {
+            gravitationalConstant: -8000,
+            springConstant: 0.001,
+            springLength: 3000
+          }
         }
-        // physics: {
-        //   stabilization: false,
-        //   barnesHut: {
-        //     gravitationalConstant: -80000,
-        //     springConstant: 0.001,
-        //     springLength: 200
-        //   }
-        // },
       },
       events: {
-        // select: event => {
-        //   console.log("select");
-        //   console.log("Event:");
-        //   this.neighbourhoodHighlight(event);
-        //   console.log(event);
-        //   var { nodes, edges } = event;
-        //   console.log("Selected nodes:");
-        //   console.log(nodes);
-        //   console.log("Selected edges:");
-        //   console.log(edges);
-        // },
         select: event => {
           console.log("select");
           this.handleSelect(event);
         },
-        click: event => {}
+        click: event => {},
+        doubleClick: event => {
+          console.log("doubleClick");
+          console.log(event);
+          this.handleDoubleClick(event);
+        }
       },
       network: null,
       highlightActive: false
@@ -88,7 +103,6 @@ class ReactGraphVisNeibours extends Component {
 
   componentDidMount() {
     console.log("Finished ReactGraphVisNeibours");
-    console.log(this.state.network);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -189,6 +203,11 @@ class ReactGraphVisNeibours extends Component {
   handleSelect = event => {
     console.log("handleSelect");
     console.log(event);
+  };
+
+  handleDoubleClick = event => {
+    const selectedId = event.nodes[0];
+    this.props.nodeUp(selectedId);
   };
 
   render() {

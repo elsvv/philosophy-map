@@ -17,22 +17,30 @@ const ThinkerInfo = props => {
   return (
     <div className="ThinkerInfo">
       <dl className="biography">
-        <div className="birth-date">
-          <dt>Birth date:{"\u00A0"}</dt>
-          <dd>{birth_strings}</dd>
-        </div>
-        <div className="death-date">
-          <dt>Death date:{"\u00A0"}</dt>
-          <dd>{death_strings}</dd>
-        </div>
-        <div className="nationalities">
-          <dt>Nationalities:{"\u00A0"}</dt>
-          <dd>{nationalities}</dd>
-        </div>
-        <div className="professions">
-          <dt>Professions:{"\u00A0"}</dt>
-          <dd>{professions.join(", ")}</dd>
-        </div>
+        {birth_strings != "" ? (
+          <div className="birth-date">
+            <dt>Birth date:{"\u00A0"}</dt>
+            <dd>{birth_strings}</dd>
+          </div>
+        ) : null}
+        {death_strings != "" ? (
+          <div className="death-date">
+            <dt>Death date:{"\u00A0"}</dt>
+            <dd>{death_strings}</dd>
+          </div>
+        ) : null}
+        {nationalities != "" ? (
+          <div className="nationalities">
+            <dt>Nationalities:{"\u00A0"}</dt>
+            <dd>{nationalities.join(", ")}</dd>
+          </div>
+        ) : null}
+        {professions != "" ? (
+          <div className="professions">
+            <dt>Professions:{"\u00A0"}</dt>
+            <dd>{professions.join(", ")}</dd>
+          </div>
+        ) : null}
       </dl>
       <LinkSet wiki={wiki} pp={label} sep={sep_dir} />
     </div>

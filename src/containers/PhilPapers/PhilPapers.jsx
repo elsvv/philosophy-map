@@ -49,19 +49,19 @@ class PhilPapers extends Component {
         parents = theme[2].split(",").map(el => parseInt(el)),
         primeParent = parseInt(theme[3]);
       let mainColor = false,
-        mainValue = false;
+        mainSize = false;
 
       if (primeParent === 1) {
         mainContainer.push(theme);
-        mainColor = "#ccc";
-        mainValue = 5000;
+        // mainColor = "#ccc";
+        mainSize = 50;
       }
 
       parsedNodes.push({
         id: id,
         title: "none",
         label: name,
-        value: mainValue || 10,
+        size: mainSize || 18,
         color: mainColor || "#fff"
       });
 
@@ -115,8 +115,8 @@ class PhilPapers extends Component {
     );
     const searchIds = [];
     resNodes.forEach(node => {
-      node.color = "#fff";
-      node.value = 5000;
+      // node.color = "#fff";
+      node.size = 30;
       searchIds.push(node.id);
     });
 
@@ -181,18 +181,21 @@ class PhilPapers extends Component {
 
   render() {
     const { isWaiting, isFiltered } = this.state;
-    const controls = [
-      { name: "back", handler: this.props.changeDisplay, arg: "entry" },
-      { name: "mini", handler: this.props.changeDisplay, arg: "hidden" }
-    ];
     const nodes = this.state.nodes || this.state.parsedNodes;
     const edges = this.state.edges || this.state.parsedEdges;
     let message = isFiltered ? "Update graph" : "See full map";
 
+    if (this.props.draggie) {
+      return (
+        <div className="draggie">
+          <Controls controls={this.props.controls} />
+        </div>
+      );
+    }
+
     return (
       <div className="philpapers-container">
-        <Controls controls={controls} />
-
+        <Controls controls={this.props.controls} />
         <TextComponent
           title="PhilPapers"
           description="Data parsed via PhilPapers API. Here you can visualize the full map with more than 5.5 thousand nodes."
@@ -216,10 +219,6 @@ class PhilPapers extends Component {
             />
           </>
         ) : null}
-        {/*   <div className="button-set">
-           <Button text="PhilPapers.org API" data="philpapers" />
-          <Button text="InPhO API" style={{ background: "#C0C0C0" }} />
-        </div>*/}
       </div>
     );
   }

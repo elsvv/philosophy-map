@@ -18,13 +18,14 @@ class InfoContainer extends Component {
     return (
       <div className="InfoContainer">
         <Controls controls={controls} />
-        <br />
-        <h2>{label}</h2>
-        {type == "thinker" ? (
-          <ThinkerInfo {...this.props.selectedData} />
-        ) : (
-          <IdeaInfo {...this.props.selectedData} />
-        )}
+        <div className="info">
+          <h2>{label}</h2>
+          {type == "thinker" ? (
+            <ThinkerInfo {...this.props.selectedData} />
+          ) : (
+            <IdeaInfo {...this.props.selectedData} />
+          )}
+        </div>
       </div>
     );
   }
