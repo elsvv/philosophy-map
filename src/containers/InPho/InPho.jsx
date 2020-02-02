@@ -53,9 +53,6 @@ class InPho extends Component {
           if (el.type == "thinker") {
             thinkers.push(el);
           }
-          // if (el.type != "thinker" && el.type != "idea") {
-          //   other.push(el);
-          // }
         });
 
         this.setState({
@@ -64,113 +61,66 @@ class InPho extends Component {
           // other,
           isWaiting: false
         });
-        console.log("ideas", this.state.ideas);
-        console.log("thinkers", this.state.thinkers);
         this.props.toggleLoader();
       })
       .catch(error => {
         console.log("Catch error:", error);
       });
   };
-
-  handleGetInPho = () => {
-    console.log("handleGetInPho");
-    const ids = [];
-    let path = "idea/931/graph";
-    axios
-      .get(`${url}/${path}.json`)
-      .then(res => console.log(res))
-
-      // complex then parser
-      .then(res => {
-        console.log(res);
-        const parsed = res.data.split("entropy*float")[1].split("\n\n");
-
-        const nodesInfo = parsed[0].split("\n");
-        nodesInfo.splice(0, 1);
-
-        const nodes = [];
-        nodesInfo.forEach((node, idx) => {
-          let nodeAr = node.split(' "');
-          nodes.push({
-            id: parseInt(nodeAr[0]),
-            label: nodeAr[1].replace(/^[\"]+|[\"]+$/g, ""),
-            sep: nodeAr[2] == '""' ? null : nodeAr[2]
-          });
-        });
-        console.log("nodesInfo", nodesInfo);
-
-        const edgesInfo = parsed[1].split("weight*float\n")[1].split("\n");
-        console.log("edgesInfo", edgesInfo);
-
-        const edges = [];
-        edgesInfo.forEach(edge => {
-          let edgeAr = edge.split(" ");
-          // console.log("edgeAr", edgeAr);
-          edges.push({
-            from: parseInt(edgeAr[0]),
-            to: parseInt(edgeAr[1])
-          });
-        });
-
-        this.setState({
-          nodes,
-          edges,
-          isWaiting: false
-        });
-
-        this.props.toggleLoader();
-      })
-
-      .catch(er => {
-        console.log("Catch error: ", er);
-      });
-  };
-
-  parseToVis = data => {
-    let parsedNodes = [],
-      parsedEdges = [];
-
-    let mainContainer = [];
-
-    data.forEach((theme, idx) => {
-      let name = theme[0],
-        id = parseInt(theme[1]),
-        parents = theme[2].split(",").map(el => parseInt(el)),
-        primeParent = parseInt(theme[3]);
-      let mainColor = false,
-        mainValue = false;
-
-      if (primeParent === 1) {
-        mainContainer.push(theme);
-        mainColor = "#ccc";
-        mainValue = 5000;
-      }
-
-      parsedNodes.push({
-        id: id,
-        title: "none",
-        label: name,
-        value: mainValue || 10,
-        color: mainColor || "#fff"
-      });
-
-      parents.forEach(par => {
-        parsedEdges.push({
-          from: id,
-          to: par === 1 ? undefined : par,
-          primeParent: primeParent
-        });
-      });
-    });
-
-    this.setState({
-      parsedNodes,
-      parsedEdges,
-      isWaiting: false
-    });
-    this.props.toggleLoader();
-  };
+  //
+  // handleGetInPho = () => {
+  //   console.log("handleGetInPho");
+  //   const ids = [];
+  //   let path = "idea/931/graph";
+  //   axios
+  //     .get(`${url}/${path}.json`)
+  //     .then(res => console.log(res))
+  //
+  //     // complex then parser
+  //     .then(res => {
+  //       console.log(res);
+  //       const parsed = res.data.split("entropy*float")[1].split("\n\n");
+  //
+  //       const nodesInfo = parsed[0].split("\n");
+  //       nodesInfo.splice(0, 1);
+  //
+  //       const nodes = [];
+  //       nodesInfo.forEach((node, idx) => {
+  //         let nodeAr = node.split(' "');
+  //         nodes.push({
+  //           id: parseInt(nodeAr[0]),
+  //           label: nodeAr[1].replace(/^[\"]+|[\"]+$/g, ""),
+  //           sep: nodeAr[2] == '""' ? null : nodeAr[2]
+  //         });
+  //       });
+  //       console.log("nodesInfo", nodesInfo);
+  //
+  //       const edgesInfo = parsed[1].split("weight*float\n")[1].split("\n");
+  //       console.log("edgesInfo", edgesInfo);
+  //
+  //       const edges = [];
+  //       edgesInfo.forEach(edge => {
+  //         let edgeAr = edge.split(" ");
+  //         // console.log("edgeAr", edgeAr);
+  //         edges.push({
+  //           from: parseInt(edgeAr[0]),
+  //           to: parseInt(edgeAr[1])
+  //         });
+  //       });
+  //
+  //       this.setState({
+  //         nodes,
+  //         edges,
+  //         isWaiting: false
+  //       });
+  //
+  //       this.props.toggleLoader();
+  //     })
+  //
+  //     .catch(er => {
+  //       console.log("Catch error: ", er);
+  //     });
+  // };
 
   componentDidMount() {
     this.handleGetEntity();
@@ -218,7 +168,11 @@ class InPho extends Component {
     if (event.preventDefault instanceof Function) {
       event.preventDefault();
     }
-    const { previewIds } = this.state;
+    const { previewIds, isFiltered } = this.state;
+
+    if (!isFiltered || previewIds.length === 0) {
+      return false;
+    }
 
     this.props.toggleLoader();
 
@@ -268,7 +222,6 @@ class InPho extends Component {
     console.log("toRender", toRender);
     this.setState({ toRender });
     setTimeout(() => this.handleCollectAll(), 6000);
-    // this.handleCollectAll();
   };
 
   handleCollectAll = () => {
@@ -512,7 +465,7 @@ class InPho extends Component {
       <div className="inpho-container">
         <Controls controls={this.props.controls} />
         <TextComponent
-          description="Data parsed via InPhO API. Here you can visualize the philosophy taxonomy with more then 250 nodes. Or search for concrete topic, its info and its relateted authors/concepts."
+          description="Here you can visualize the philosophy taxonomy with >250 nodes. Or search for concrete topic, its info and its related authors/concepts."
           title="Internet Philosophy Ontology project"
           pick="Start typing for a thinker/idea:"
           waiting="data is loading..."

@@ -29,14 +29,22 @@
 
     &.mini {
       background-image: url(../../assets/icons/maximize.svg);
-      // background-image: url(../../assets/icons/minimize.svg);
       cursor: alias;
     }
 
     &.max {
       background-image: url(../../assets/icons/web.svg);
-      // background-image: url(../../assets/icons/minimize.svg);
       cursor: alias;
+    }
+
+    &.about {
+      background-image: url(../../assets/icons/info.svg);
+      cursor: help;
+    }
+
+    &.colors {
+      background-image: url(../../assets/icons/colors.svg);
+      cursor: help;
     }
   }
 }

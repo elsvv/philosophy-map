@@ -15,7 +15,7 @@ const Entry = props => {
 
   const controls = [
     { name: "info", handler: null, arg: "info" },
-    { name: "github", handler: null, arg: "github" }
+    { name: "about", handler: props.changeDisplay, arg: "about" }
   ];
   const description = (
     <>

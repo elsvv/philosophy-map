@@ -86,6 +86,12 @@ class PhilPapers extends Component {
     this.handleGetPp();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.doubleClicked != this.props.doubleClicked) {
+      this.handleRender(nextProps.doubleClicked);
+    }
+  }
+
   passUp = (nodes, edges) => {
     this.props.handleUp(nodes, edges);
   };
@@ -101,14 +107,26 @@ class PhilPapers extends Component {
       let preview = this.state.parsedNodes
         .filter(node => node.label.toLowerCase().includes(search))
         .reduce((ac, el) => [...ac, { label: el.label, id: el.id }], []);
-      return this.setState({ preview: preview });
+      return this.setState({ preview: preview, isFiltered: true });
     }
-    this.setState({ preview: null });
+    this.setState({ preview: null, isFiltered: false });
   };
 
   handleSubmit = event => {
-    event.preventDefault();
-    const { parsedNodes, toFind, parsedEdges } = this.state;
+    if (event.preventDefault instanceof Function) {
+      event.preventDefault();
+    }
+    const {
+      parsedNodes,
+      toFind,
+      parsedEdges,
+      isFiltered,
+      preview
+    } = this.state;
+
+    if (!isFiltered || preview.length === 0) {
+      return false;
+    }
 
     const resNodes = parsedNodes.filter(node =>
       node.label.toLowerCase().includes(toFind)
@@ -140,20 +158,24 @@ class PhilPapers extends Component {
     });
 
     this.setState({ nodes: resNodes, edges: resEdges, isFiltered: true });
-    // if (resNodes && resEdges) {
-    // }
+    this.passUp(resNodes, resEdges);
   };
 
   handleOption = event => {
     console.log("handleOption");
-    const selectedId = event.target.dataset.id;
+    const selectedId = parseInt(event.target.dataset.id);
+    this.handleRender(selectedId);
+  };
+
+  handleRender = selectedId => {
     const { parsedEdges, parsedNodes } = this.state;
+    const selectedNode = parsedNodes.find(node => node.id === selectedId);
 
     let relatedIds = [];
     let edges = [];
 
     parsedEdges.forEach(edge => {
-      if (edge.to == selectedId || edge.from == selectedId) {
+      if (edge.to == selectedId || edge.from === selectedId) {
         edges.push(edge);
         relatedIds.push(edge.to);
         relatedIds.push(edge.from);
@@ -163,7 +185,7 @@ class PhilPapers extends Component {
     let nodes = [];
     relatedIds.forEach(id => {
       parsedNodes.forEach(node => {
-        if (node.id == id) {
+        if (node.id === id) {
           nodes.push(node);
         }
       });
@@ -177,13 +199,18 @@ class PhilPapers extends Component {
 
     this.setState({ nodes, edges, isFiltered: true });
     this.passUp(nodes, edges);
+    this.props.handleSelectedUp(selectedNode);
+    this.props.infoToggle(true);
   };
 
   render() {
     const { isWaiting, isFiltered } = this.state;
     const nodes = this.state.nodes || this.state.parsedNodes;
     const edges = this.state.edges || this.state.parsedEdges;
-    let message = isFiltered ? "Update graph" : "See full map";
+    const buttonHandler = isFiltered
+      ? this.handleSubmit
+      : () => this.passUp(nodes, edges);
+    const message = isFiltered ? "Update graph" : "See full map";
 
     if (this.props.draggie) {
       return (
@@ -215,7 +242,7 @@ class PhilPapers extends Component {
             <Button
               text={message}
               data="philpapers"
-              handleClick={() => this.passUp(nodes, edges)}
+              handleClick={buttonHandler}
             />
           </>
         ) : null}

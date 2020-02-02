@@ -42,7 +42,7 @@ const ThinkerInfo = props => {
           </div>
         ) : null}
       </dl>
-      <LinkSet wiki={wiki} pp={label} sep={sep_dir} />
+      <LinkSet title="Read more:" wiki={wiki} pp={label} sep={sep_dir} />
     </div>
   );
 };

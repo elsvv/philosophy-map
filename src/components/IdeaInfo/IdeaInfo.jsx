@@ -15,7 +15,7 @@ const IdeaInfo = props => {
 
   return (
     <div className="IdeaInfo">
-      <LinkSet wiki={label} pp={label} sep={sep_dir} />
+      <LinkSet title="Read more:" wiki={label} pp={label} sep={sep_dir} />
     </div>
   );
 };
