@@ -35,7 +35,6 @@ class InPho extends Component {
   }
 
   handleGetEntity = () => {
-    console.log("handleGetEntity");
     axios
       .get(`${url}entity.json`)
       .then(res => {
@@ -47,10 +46,10 @@ class InPho extends Component {
         // other = [];
 
         data.forEach(el => {
-          if (el.type == "idea") {
+          if (el.type === "idea") {
             ideas.push(el);
           }
-          if (el.type == "thinker") {
+          if (el.type === "thinker") {
             thinkers.push(el);
           }
         });
@@ -67,60 +66,6 @@ class InPho extends Component {
         console.log("Catch error:", error);
       });
   };
-  //
-  // handleGetInPho = () => {
-  //   console.log("handleGetInPho");
-  //   const ids = [];
-  //   let path = "idea/931/graph";
-  //   axios
-  //     .get(`${url}/${path}.json`)
-  //     .then(res => console.log(res))
-  //
-  //     // complex then parser
-  //     .then(res => {
-  //       console.log(res);
-  //       const parsed = res.data.split("entropy*float")[1].split("\n\n");
-  //
-  //       const nodesInfo = parsed[0].split("\n");
-  //       nodesInfo.splice(0, 1);
-  //
-  //       const nodes = [];
-  //       nodesInfo.forEach((node, idx) => {
-  //         let nodeAr = node.split(' "');
-  //         nodes.push({
-  //           id: parseInt(nodeAr[0]),
-  //           label: nodeAr[1].replace(/^[\"]+|[\"]+$/g, ""),
-  //           sep: nodeAr[2] == '""' ? null : nodeAr[2]
-  //         });
-  //       });
-  //       console.log("nodesInfo", nodesInfo);
-  //
-  //       const edgesInfo = parsed[1].split("weight*float\n")[1].split("\n");
-  //       console.log("edgesInfo", edgesInfo);
-  //
-  //       const edges = [];
-  //       edgesInfo.forEach(edge => {
-  //         let edgeAr = edge.split(" ");
-  //         // console.log("edgeAr", edgeAr);
-  //         edges.push({
-  //           from: parseInt(edgeAr[0]),
-  //           to: parseInt(edgeAr[1])
-  //         });
-  //       });
-  //
-  //       this.setState({
-  //         nodes,
-  //         edges,
-  //         isWaiting: false
-  //       });
-  //
-  //       this.props.toggleLoader();
-  //     })
-  //
-  //     .catch(er => {
-  //       console.log("Catch error: ", er);
-  //     });
-  // };
 
   componentDidMount() {
     this.handleGetEntity();
@@ -218,8 +163,6 @@ class InPho extends Component {
       });
     });
 
-    console.log("FINISH MASS GET");
-    console.log("toRender", toRender);
     this.setState({ toRender });
     setTimeout(() => this.handleCollectAll(), 6000);
   };
@@ -260,7 +203,6 @@ class InPho extends Component {
       nodes.push({
         id: node.ID,
         label: node.label,
-        // value: isImportant ? 1000000 : 20000
         size: isImportant ? 35 : 15
       });
     });
@@ -272,7 +214,6 @@ class InPho extends Component {
   };
 
   handleOption = event => {
-    console.log("handleOption");
     const selectedId = parseInt(event.target.dataset.id);
     this.handleRender(selectedId);
   };

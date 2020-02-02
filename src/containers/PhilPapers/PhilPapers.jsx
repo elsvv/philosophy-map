@@ -162,7 +162,6 @@ class PhilPapers extends Component {
   };
 
   handleOption = event => {
-    console.log("handleOption");
     const selectedId = parseInt(event.target.dataset.id);
     this.handleRender(selectedId);
   };
@@ -194,8 +193,6 @@ class PhilPapers extends Component {
     nodes = [...new Set(nodes)];
 
     relatedIds = [...new Set(relatedIds)];
-    console.log("relatedIds", relatedIds);
-    console.log("nodes", nodes);
 
     this.setState({ nodes, edges, isFiltered: true });
     this.passUp(nodes, edges);

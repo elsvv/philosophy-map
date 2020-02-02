@@ -7,7 +7,6 @@ const rowFunc = colorList => {
   let renderColors = [];
   let row = [];
 
-  // for (let i = 0; i < colorList.length; i++)
   for (let i in colorList) {
     if (i % 2 == 0 && i != 0) {
       renderColors.push(
@@ -22,7 +21,7 @@ const rowFunc = colorList => {
         <div
           key={i}
           className="color-circle"
-          style={{ "background-color": colorList[i].color }}
+          style={{ backgroundColor: colorList[i].color }}
         ></div>
         <p className="color-text">{colorList[i].label}</p>
       </div>
@@ -61,31 +60,6 @@ const Colors = props => {
     { label: "occurrences and instances", color: "#FFFCB2" },
     { label: "instances", color: "#FFD4F1" }
   ];
-
-  // const renderColors =
-  //   props.type === "thinker"
-  //     ? thinkerColors.map(el => {
-  //         return (
-  //           <div className="color-item">
-  //             <div
-  //               className="color-circle"
-  //               style={{ "background-color": el.color }}
-  //             ></div>
-  //             <p className="color-text">{el.label}</p>
-  //           </div>
-  //         );
-  //       })
-  //     : ideaColors.map(el => {
-  //         return (
-  //           <div className="color-item">
-  //             <div
-  //               className="color-circle"
-  //               style={{ "background-color": el.color }}
-  //             ></div>
-  //             <p className="color-text">{el.label}</p>
-  //           </div>
-  //         );
-  //       });
 
   const renderColors =
     props.type === "thinker" ? rowFunc(thinkerColors) : rowFunc(ideaColors);

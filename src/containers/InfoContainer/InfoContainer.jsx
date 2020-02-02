@@ -15,10 +15,13 @@ const InfoContainer = props => {
   };
 
   const { label, type } = props.selectedData;
-  const controls = [
-    { name: "hide", handler: props.infoToggle, arg: false },
-    { name: "colors", handler: colorsHandler, arg: true }
-  ];
+  const controls =
+    type != undefined
+      ? [
+          { name: "hide", handler: props.infoToggle, arg: false },
+          { name: "colors", handler: colorsHandler, arg: true }
+        ]
+      : [{ name: "hide", handler: props.infoToggle, arg: false }];
 
   if (isColors) {
     return (

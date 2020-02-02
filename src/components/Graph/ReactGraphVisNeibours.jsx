@@ -85,14 +85,7 @@ class ReactGraphVisNeibours extends Component {
         }
       },
       events: {
-        select: event => {
-          console.log("select");
-          this.handleSelect(event);
-        },
-        click: event => {},
         doubleClick: event => {
-          console.log("doubleClick");
-          console.log(event);
           this.handleDoubleClick(event);
         }
       },
@@ -101,13 +94,10 @@ class ReactGraphVisNeibours extends Component {
     };
   }
 
-  componentDidMount() {
-    console.log("Finished ReactGraphVisNeibours");
-  }
+  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.nodes != this.props.nodes) {
-      console.log("nextProps UPDATE");
       this.state.network.setData({
         nodes: nextProps.nodes,
         edges: nextProps.edges
@@ -198,11 +188,6 @@ class ReactGraphVisNeibours extends Component {
     }
     // network.setData({nodes: })
     this.setState({ graph: { nodes: updateArray }, network });
-  };
-
-  handleSelect = event => {
-    console.log("handleSelect");
-    console.log(event);
   };
 
   handleDoubleClick = event => {

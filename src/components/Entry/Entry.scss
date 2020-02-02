@@ -1,2 +1,15 @@
 .Entry {
+  .controls-container {
+    flex-direction: row-reverse;
+  }
+  .italic {
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  .about {
+    .footer {
+      margin-top: 100px;
+    }
+  }
 }

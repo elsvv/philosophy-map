@@ -5,7 +5,6 @@ import "./MenuContainer.scss";
 import Entry from "../../components/Entry/Entry";
 import PhilPapers from "../PhilPapers/PhilPapers";
 import InPho from "../InPho/InPho";
-import About from "../../components/About/About";
 
 class MenuContainer extends Component {
   constructor(props) {
@@ -44,9 +43,6 @@ class MenuContainer extends Component {
             changeDisplay={this.changeDisplay}
             toggleLoader={this.props.toggleLoader}
           />
-        ) : null}
-        {display === "about" ? (
-          <About changeDisplay={this.changeDisplay} controls={controls} />
         ) : null}
         {display === "philpapers" ? (
           <PhilPapers
