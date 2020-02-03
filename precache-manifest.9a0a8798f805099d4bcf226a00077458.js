@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "3d156a161bdd12349b56239373da7b78",
+    "revision": "1785581dba7172af3830a2907108ec6e",
     "url": "/philosophy-map/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/philosophy-map/static/css/2.117ce29f.chunk.css"
   },
   {
-    "revision": "681f9f3310bb714d86bd",
+    "revision": "ffa0d8f6c0a4d75bb9f3",
     "url": "/philosophy-map/static/css/main.bd8dc80a.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/philosophy-map/static/js/2.c3e7c878.chunk.js.LICENSE"
   },
   {
-    "revision": "681f9f3310bb714d86bd",
-    "url": "/philosophy-map/static/js/main.d16a43e1.chunk.js"
+    "revision": "ffa0d8f6c0a4d75bb9f3",
+    "url": "/philosophy-map/static/js/main.562e6585.chunk.js"
   },
   {
     "revision": "124e1d7f0472affa9fd3",

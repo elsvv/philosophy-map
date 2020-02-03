@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/philosophy-map/static/css/main.bd8dc80a.chunk.css",
-    "main.js": "/philosophy-map/static/js/main.d16a43e1.chunk.js",
-    "main.js.map": "/philosophy-map/static/js/main.d16a43e1.chunk.js.map",
+    "main.js": "/philosophy-map/static/js/main.562e6585.chunk.js",
+    "main.js.map": "/philosophy-map/static/js/main.562e6585.chunk.js.map",
     "runtime-main.js": "/philosophy-map/static/js/runtime-main.eaa3f04c.js",
     "runtime-main.js.map": "/philosophy-map/static/js/runtime-main.eaa3f04c.js.map",
     "static/css/2.117ce29f.chunk.css": "/philosophy-map/static/css/2.117ce29f.chunk.css",
     "static/js/2.c3e7c878.chunk.js": "/philosophy-map/static/js/2.c3e7c878.chunk.js",
     "static/js/2.c3e7c878.chunk.js.map": "/philosophy-map/static/js/2.c3e7c878.chunk.js.map",
     "index.html": "/philosophy-map/index.html",
-    "precache-manifest.8e5c79a6b9c223a4cb8cdccd1885e552.js": "/philosophy-map/precache-manifest.8e5c79a6b9c223a4cb8cdccd1885e552.js",
+    "precache-manifest.9a0a8798f805099d4bcf226a00077458.js": "/philosophy-map/precache-manifest.9a0a8798f805099d4bcf226a00077458.js",
     "service-worker.js": "/philosophy-map/service-worker.js",
     "static/css/2.117ce29f.chunk.css.map": "/philosophy-map/static/css/2.117ce29f.chunk.css.map",
     "static/css/main.bd8dc80a.chunk.css.map": "/philosophy-map/static/css/main.bd8dc80a.chunk.css.map",
@@ -24,6 +24,6 @@
     "static/css/2.117ce29f.chunk.css",
     "static/js/2.c3e7c878.chunk.js",
     "static/css/main.bd8dc80a.chunk.css",
-    "static/js/main.d16a43e1.chunk.js"
+    "static/js/main.562e6585.chunk.js"
   ]
 }
