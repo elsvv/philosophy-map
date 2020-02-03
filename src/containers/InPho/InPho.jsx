@@ -177,9 +177,7 @@ class InPho extends Component {
       delete toRender[`n${id}`].label;
       const idList = Object.values(toRender[`n${id}`]);
       for (let li of idList) {
-        console.log("li", li);
         for (let to of li) {
-          console.log("to", to);
           edges.push({
             from: id,
             to
@@ -207,7 +205,6 @@ class InPho extends Component {
       });
     });
 
-    console.log(nodes);
     this.setState({ nodes, edges });
     this.passUp(nodes, edges);
     this.props.toggleLoader();
