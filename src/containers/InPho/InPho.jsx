@@ -173,7 +173,6 @@ class InPho extends Component {
       nodes = [],
       edges = [];
     previewIds.forEach(id => {
-      console.log(toRender[`n${id}`]);
       delete toRender[`n${id}`].label;
       const idList = Object.values(toRender[`n${id}`]);
       for (let li of idList) {
