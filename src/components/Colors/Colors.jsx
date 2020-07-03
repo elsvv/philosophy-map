@@ -46,9 +46,9 @@ const Colors = props => {
 
   const thinkerColors = [
     { label: "influenced", color: "#EC8584" },
+    { label: "influenced and/or influenced by", color: "#DDFFC3" },
     { label: "influenced by", color: "#8FBBFF" },
-    { label: "related ideas", color: "#FFFE54" },
-    { label: "influenced and/or influenced by", color: "#DDFFC3" }
+    { label: "related ideas", color: "#FFFE54" }
   ];
   const ideaColors = [
     { label: "occurrences", color: "#FFCEAB" },
